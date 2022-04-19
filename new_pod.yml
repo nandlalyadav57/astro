@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-client
+  labels:
+    app: postgres-client
+spec:
+  containers:
+  - image: postgres:latest
+    command:
+      - sleep
+      - "3600"
+    imagePullPolicy: IfNotPresent
+    name: postgres-client
+  restartPolicy: Always
