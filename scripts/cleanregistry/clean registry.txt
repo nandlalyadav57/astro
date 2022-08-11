@@ -1,0 +1,124 @@
+Hi Leng,
+
+There are two solutions to this: We can either ``` increase the persistent volume``` size or ```clean the registry```.
+ 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+**A) Increase the persistent volume size by configuring the helm values**
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+A1.) Ensure Storage Class allows for volume expansion. If disabled, add a flag on the top level.
+
+~~~
+kubectl get sc
+kubectl edit sc <scname> -n astronomer
+...
+allowVolumeExpansion: true
+~~~
+
+A2.) Delete the registry stateful set.
+
+~~~
+kubectl delete sts astronomer-registry -n astronomer --cascade=false
+~~~
+
+A3.) Add a snippet to the helm values and perform a helm upgrade.
+
+~~~
+astronomer:
+  registry:
+    persistence:
+      size: <desired value>
+~~~
+
+A4.) Verify the change in the registry pod
+
+~~~
+kubectl exec -it astronomer-registry-0 -n astronomer -- df -h
+~~~
+
+Or you can manually increase the storage as well using below steps:
+
+
+***How to Manually increase the storage size***
+ 
+
+1.) Scale down registry stateful set
+
+~~~
+kubectl scale sts astronomer-registry --replicas=0>
+~~~
+
+2,) Edit registry PVC object to having the desired storage size
+
+~~~
+kubectl edit pvc data-astronomer-registry-0
+~~~
+
+3.) Scale back up registry stateful set
+
+~~~
+kubectl scale sts astronomer-registry --replicas=1
+~~~
+
+4.) Verify the change in the registry pod
+
+~~~
+kubectl exec -it astronomer-registry-0 -n astronomer -- df -h
+~~~
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+**B. Steps to clean the registry**
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Notes
+The script below does not work for registries with tags that are not only integers. You will get an error like the below.
+
+~~~
+ValueError: invalid literal for int() with base 10: '016873bbf14384412b274be3297dbf6b8c8e98c2'
+~~~
+
+If you have self-issued certs for the registry, you will need to disable the request to verify.
+
+~~~
+s = requests.Session()
+s.verify = False
+~~~
+
+
+B1.) First, get the credentials. If your platform release name is not called "astronomer" change it in the command below
+
+~~~
+mkdir -p keys && kubectl get secret -n astronomer astronomer-tls -o jsonpath='{.data.tls\.key}' | base64 -d > keys/tls.key
+~~~
+
+(If you are running from OSX, replace base64 -d​ with base64 -D​)
+
+B2.)  Install the required python modules:
+
+~~~
+virtualenv registry-cleanup
+. ./registry-cleanup/bin/activate
+pip3 install requests==2.22.0 PyJWT==1.7.1 cryptography==2.6.1
+~~~
+
+B3.)  Run the attached script with dry run to see what it would delete: (correct the registry below)
+
+~~~
+python3 ./delete-old-image-tags.py --dry-run --deployment-release-name modern-rocket-1234 -r registry.BASEDOMAIN
+~~~
+
+B4.)  If the dry run looks sensible, re-run the command without --dry-run. This command may print the occasional 404 error, those can usually be ignored.
+
+B5.)  We need to tell the Registry to actually delete the now unreferenced files (again, correcting the "astronomer" namespace if it is not where your platform is deployed):
+
+~~~
+kubectl exec -n astronomer -ti $(kubectl -n astronomer get pods -l component=registry -o jsonpath="{.items[*].metadata.name}") -c registry -- registry garbage-collect /etc/docker/registry/config.yml
+~~~
+
+This last command should print a lot of output but should start deleting files. There may be a long pause after it prints lines about "marking blob" before it starts deleting blobs.
+
+If you have a number of images with a large number of tags you can repeat steps 3, and 4, then run step 5 once at the end.
+
+Once you are done you should remove the key you extracted from Kubernetes.
