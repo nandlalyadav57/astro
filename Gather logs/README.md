@@ -1,10 +1,15 @@
-Just fill the value of the Astronomer namespace & Deployment namespace where you want to collect logs:
 
+You need to replace below parameters:
+
+Astronomer namespace (Astronomer Namespace to collect logs)
+Deployment namespace (Deployment Namespace to collect logs)
+DIR (local directory to export the logs)
 
 
 ~~~
 ASTRONOMER_NAMESPACE=
 DEPLOYMENT_NS1=
+export DIR=
 ~~~
 
 
