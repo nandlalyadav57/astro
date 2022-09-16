@@ -19,23 +19,8 @@ Copy the script content and run it in the command line to get the logs.
 
 
 
+Expected output: Log GZ file inside $DIR & A Log zip file containing same files which are pod log,events,helm values etc. in the required namespaces.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Expected output
 
 ![image](https://user-images.githubusercontent.com/33649510/190684618-33486992-f732-460d-b340-d593f34f73ab.png)
 ![image](https://user-images.githubusercontent.com/33649510/190684736-1a1be75e-f3cc-4dde-a414-04c23a855b14.png)
