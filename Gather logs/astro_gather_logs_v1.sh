@@ -6,15 +6,20 @@ export ASTRONOMER_NAMESPACE=astronomer
 export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "astronomer"|head -n1 | awk '{ print $2}')
 # Put the name of the deployment ASTRONOMER_NAMESPACE 1 where we are having issues
 export DEPLOYMENT_NS1=astronomer-combusting-plane-6703
-# removing and putting as release name
+# removing astronomer- and putting as release name
 export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
+#setting log directory
+export DIR=/tmp/astro_logs
+
 echo $ASTRONOMER_NAMESPACE
 echo $ASTRONOMER_RELEASE
 echo $DEPLOYMENT_NS1
 echo $Release1
-mkdir -p /tmp/astro_logs
-chmod -R 777 /tmp/astro_logs
-cd /tmp/astro_logs
+echo $DIR
+
+mkdir -p $DIR
+chmod -R 777 $DIR
+cd $DIR
 #Gather logs now
 kubectl config set-context --current --namespace=$ASTRONOMER_NAMESPACE
 echo "Gathering $ASTRONOMER_NAMESPACE events & logs"
@@ -62,8 +67,8 @@ kubectl -n $DEPLOYMENT_NS1 logs sts/$Release1-redis > redis_$Release1.log
 
 
 echo "creating GZ and zip files"
-tar -czvf /tmp/astro_logs_$(date +%F).tar.gz /tmp/astro_logs
-zip -r /tmp/astro_logs.zip /tmp/astro_logs/*
+tar -czvf $DIR_$(date +%F).tar.gz $DIR
+zip -r $DIR.zip $DIR
 
 echo "Share the log or zip file for troubleshooting"
 
