@@ -14,7 +14,7 @@ export DIR=
 
 
 
-Copy the script content and run it in the command line to get the logs.
+Copy the script content from [here](https://github.com/nandlalyadav57/astro/blob/main/Gather%20logs/astro_gather_logs_v1.sh) and run it in the command line to get the necessary logs.
 
 
 
