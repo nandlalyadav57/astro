@@ -10,19 +10,20 @@ export DEPLOYMENT_NS1=astronomer-combusting-plane-6703
 export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
 export DIR=/tmp/astro_logs
-
+#####====================================================================================================================================================#####
 echo $ASTRONOMER_NAMESPACE
 echo $ASTRONOMER_RELEASE
 echo $DEPLOYMENT_NS1
 echo $Release1
 echo $DIR
-
+#####====================================================================================================================================================#####
 mkdir -p $DIR
 chmod -R 777 $DIR
 cd $DIR
-#Gather logs now
+#####====================================================================================================================================================#####
 kubectl config set-context --current --namespace=$ASTRONOMER_NAMESPACE
 echo "Gathering $ASTRONOMER_NAMESPACE events & logs"
+#####====================================================================================================================================================#####
 kubectl -n $ASTRONOMER_NAMESPACE get pods -o wide > pods_$ASTRONOMER_NAMESPACE.log
 kubectl -n $ASTRONOMER_NAMESPACE get events  > events_$ASTRONOMER_NAMESPACE.log
 kubectl -n $ASTRONOMER_NAMESPACE get secrets  > secrets_$ASTRONOMER_NAMESPACE.log
@@ -42,17 +43,20 @@ kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-elasticsearch-master > elas
 kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-nats -c nats > nats_$ASTRONOMER_NAMESPACE.log
 kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-prometheus -c prometheus > prometheus_container_$ASTRONOMER_NAMESPACE.log
 kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-stan -c stan > stan_contatiner_$ASTRONOMER_NAMESPACE.log
-
+#####====================================================================================================================================================#####
+#####====================================================================================================================================================#####
 echo "Gathering Helm logs"
+#####====================================================================================================================================================#####
 helm ls -A > helm_status.log
 helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > helm_history_$ASTRONOMER_RELEASE.log
 helm history $Release1 -n $DEPLOYMENT_NS1 > helm_history_$Release1.log
 helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > helm_values_$ASTRONOMER_RELEASE.yaml 
 helm get values $Release1 -n $DEPLOYMENT_NS1 -o yaml > helm_values_$Release1.yaml 
-
-
+#####====================================================================================================================================================#####
+#####====================================================================================================================================================#####
 echo "Gathering $DEPLOYMENT_NS1 events & logs"
 kubectl config set-context --current --namespace=$DEPLOYMENT_NS1
+#####====================================================================================================================================================#####
 kubectl -n $DEPLOYMENT_NS1 get pods -o wide > pods_$DEPLOYMENT_NS1.log
 kubectl -n $DEPLOYMENT_NS1 get events  > events_$DEPLOYMENT_NS1.log
 kubectl -n $DEPLOYMENT_NS1 get secrets  > secrets_$DEPLOYMENT_NS1.log
@@ -64,12 +68,12 @@ kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-pgbouncer -c pgbouncer > pg
 kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-flower > flower_$Release1.log
 kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-statsd > statsd_$Release1.log
 kubectl -n $DEPLOYMENT_NS1 logs sts/$Release1-redis > redis_$Release1.log
-
-
+#####====================================================================================================================================================#####
+#####====================================================================================================================================================#####
 echo "creating GZ and zip files"
+#####====================================================================================================================================================#####
 tar -czvf $DIR_$(date +%F).tar.gz $DIR
 zip -r $DIR.zip $DIR
-
+#####====================================================================================================================================================#####
 echo "Share the log or zip file for troubleshooting"
-
-
+#####====================================================================================================================================================#####
