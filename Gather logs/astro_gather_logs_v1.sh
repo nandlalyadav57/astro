@@ -61,11 +61,10 @@ kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-statsd > statsd_$Release1.l
 kubectl -n $DEPLOYMENT_NS1 logs sts/$Release1-redis > redis_$Release1.log
 
 
-
-
-
+echo "creating GZ and zip files"
 tar -czvf /tmp/astro_logs_$(date +%F).tar.gz /tmp/astro_logs
-zip -r /tmp/astro_logs.zip /tmp/astro_logs
+zip -r /tmp/astro_logs.zip /tmp/astro_logs/*
+
+echo "Share the log or zip file for troubleshooting"
 
 
-##send us the zip and .gz files##
