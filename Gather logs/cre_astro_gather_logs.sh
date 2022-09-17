@@ -30,12 +30,10 @@ chmod -R 777 "$DIR"
 ###https://stackoverflow.com/questions/589149/bash-script-to-cd-to-directory-with-spaces-in-pathname
 cd "$DIR"
 ####creating namespace Directories###
-#!/bin/bash
 for NS in $(kubectl get ns --no-headers|grep $ASTRONOMER_NAMESPACE| awk '{print $1}'); do
     echo "creating namespace $NS Directory ";mkdir $NS 
     done
-
-
+#####====================================================================================================================================================#####
 ####Gathering Describe output of bad state pods in all namespaces###
 for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
 do
@@ -43,7 +41,7 @@ do
     echo $POD pod is in bad state;echo "Collecting Describe output of bad state pods in $NS Namespace ";kubectl describe pod $POD  > "$NS/BADpodDESCRIBE_$POD_$NS.log" -n $NS   
     done
 done
-
+#####====================================================================================================================================================#####
 ####Gathering All the $ASTRONOMER_NAMESPACE logs###
 echo "Gathering All the $ASTRONOMER_NAMESPACE namespace logs"
 echo "Getting Pod Running status in $ASTRONOMER_NAMESPACE Namespace";kubectl get pods -o wide > "$ASTRONOMER_NAMESPACE/pods_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
@@ -73,12 +71,6 @@ echo "Getting Astro version status";docker version  >> "$ASTRONOMER_NAMESPACE/En
 echo "Getting helm status";helm ls -A >> "$ASTRONOMER_NAMESPACE/helm_status.log"
 echo "Getting helm history in $ASTRONOMER_NAMESPACE Namespace";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > "$ASTRONOMER_NAMESPACE/helm_history_$ASTRONOMER_RELEASE.log"
 echo "Getting helm values from $ASTRONOMER_NAMESPACE Namespace";helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > "$ASTRONOMER_NAMESPACE/helm_values_$ASTRONOMER_RELEASE.yaml"
-
-
-
-
-
-
 
 
 ####Gathering All the Deployment namespace logs###
