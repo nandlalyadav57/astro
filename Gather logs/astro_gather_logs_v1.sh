@@ -10,6 +10,10 @@ export DEPLOYMENT_NS1=astronomer-combusting-plane-6703
 export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
 export DIR=/tmp/astro_logs
+#Kinfly set base domain info for your cluster 
+##For e.g. I had a test cluster with the URL ```https://app.nandlal54.astro-cre.com`then my base domain is ```nandlal54.astro-cre.com``` ###
+#export BASEDOMAIN=nandlal51.astro-cre.com
+#astro auth login  $BASEDOMAIN
 #####====================================================================================================================================================#####
 echo $ASTRONOMER_NAMESPACE
 echo $ASTRONOMER_RELEASE
@@ -24,25 +28,25 @@ cd $DIR
 kubectl config set-context --current --namespace=$ASTRONOMER_NAMESPACE
 echo "Gathering $ASTRONOMER_NAMESPACE events & logs"
 #####====================================================================================================================================================#####
-kubectl -n $ASTRONOMER_NAMESPACE get pods -o wide > pods_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE get events  > events_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE get secrets  > secrets_$ASTRONOMER_NAMESPACE.log
+kubectl get pods -o wide -n $ASTRONOMER_NAMESPACE > pods_$ASTRONOMER_NAMESPACE.log
+kubectl get events -n $ASTRONOMER_NAMESPACE  > events_$ASTRONOMER_NAMESPACE.log
+kubectl get secrets -n $ASTRONOMER_NAMESPACE  > secrets_$ASTRONOMER_NAMESPACE.log
 kubectl get nodes -o wide > nodes.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-houston > houston_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-astro-ui  > astro-ui_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-commander > commander_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-elasticsearch-client > elasticsearch-client_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-houston-worker > houston-worker_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-nginx > nginx_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-grafana > grafana_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-kibana > kibana_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs deployment/astronomer-kube-state > kube-state_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-registry > registry_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-elasticsearch-data  > elasticsearch-data_$ASTRONOMER_NAMESPACE.log   
-kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-elasticsearch-master > elasticsearch-master_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-nats -c nats > nats_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-prometheus -c prometheus > prometheus_container_$ASTRONOMER_NAMESPACE.log
-kubectl -n $ASTRONOMER_NAMESPACE logs sts/astronomer-stan -c stan > stan_contatiner_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-houston -n $ASTRONOMER_NAMESPACE > houston_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-astro-ui -n $ASTRONOMER_NAMESPACE  > astro-ui_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-commander -n $ASTRONOMER_NAMESPACE  > commander_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-elasticsearch-client -n $ASTRONOMER_NAMESPACE  > elasticsearch-client_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-houston-worker -n $ASTRONOMER_NAMESPACE > houston-worker_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-nginx -n $ASTRONOMER_NAMESPACE > nginx_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-grafana -n $ASTRONOMER_NAMESPACE > grafana_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-kibana -n $ASTRONOMER_NAMESPACE > kibana_$ASTRONOMER_NAMESPACE.log
+kubectl logs deployment/astronomer-kube-state -n $ASTRONOMER_NAMESPACE  > kube-state_$ASTRONOMER_NAMESPACE.log
+kubectl logs sts/astronomer-registry -n $ASTRONOMER_NAMESPACE > registry_$ASTRONOMER_NAMESPACE.log
+kubectl logs sts/astronomer-elasticsearch-data -n $ASTRONOMER_NAMESPACE  > elasticsearch-data_$ASTRONOMER_NAMESPACE.log   
+kubectl logs sts/astronomer-elasticsearch-master -n $ASTRONOMER_NAMESPACE > elasticsearch-master_$ASTRONOMER_NAMESPACE.log
+kubectl logs sts/astronomer-nats -c nats -n $ASTRONOMER_NAMESPACE > nats_$ASTRONOMER_NAMESPACE.log
+kubectl logs sts/astronomer-prometheus -c prometheus -n $ASTRONOMER_NAMESPACE > prometheus_container_$ASTRONOMER_NAMESPACE.log
+kubectl logs sts/astronomer-stan -c stan -n $ASTRONOMER_NAMESPACE > stan_contatiner_$ASTRONOMER_NAMESPACE.log
 #####====================================================================================================================================================#####
 #####====================================================================================================================================================#####
 echo "Gathering Helm logs"
@@ -57,18 +61,24 @@ helm get values $Release1 -n $DEPLOYMENT_NS1 -o yaml > helm_values_$Release1.yam
 echo "Gathering $DEPLOYMENT_NS1 events & logs"
 kubectl config set-context --current --namespace=$DEPLOYMENT_NS1
 #####====================================================================================================================================================#####
-kubectl -n $DEPLOYMENT_NS1 get pods -o wide > pods_$DEPLOYMENT_NS1.log
-kubectl -n $DEPLOYMENT_NS1 get events  > events_$DEPLOYMENT_NS1.log
-kubectl -n $DEPLOYMENT_NS1 get secrets  > secrets_$DEPLOYMENT_NS1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-scheduler -c scheduler > scheduler_$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-worker -c worker > worker_$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-webserver -c webserver > webserver_$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-triggerer -c triggerer > triggerer$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-pgbouncer -c pgbouncer > pgbouncer$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-flower > flower_$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs deployment/$Release1-statsd > statsd_$Release1.log
-kubectl -n $DEPLOYMENT_NS1 logs sts/$Release1-redis > redis_$Release1.log
+kubectl get pods -o wide -n $DEPLOYMENT_NS1 > pods_$DEPLOYMENT_NS1.log
+kubectl get events -n $DEPLOYMENT_NS1 > events_$DEPLOYMENT_NS1.log
+kubectl get secrets -n $DEPLOYMENT_NS1  > secrets_$DEPLOYMENT_NS1.log
+kubectl logs deployment/$Release1-scheduler -c scheduler -n $DEPLOYMENT_NS1 > scheduler_$Release1.log
+kubectl logs deployment/$Release1-worker -c worker -n $DEPLOYMENT_NS1 > worker_$Release1.log
+kubectl logs deployment/$Release1-webserver -c webserver -n $DEPLOYMENT_NS1 > webserver_$Release1.log
+kubectl logs deployment/$Release1-triggerer -c triggerer -n $DEPLOYMENT_NS1  > triggerer$Release1.log
+kubectl logs deployment/$Release1-pgbouncer -c pgbouncer -n $DEPLOYMENT_NS1  > pgbouncer$Release1.log
+kubectl logs deployment/$Release1-flower -n $DEPLOYMENT_NS1  > flower_$Release1.log
+kubectl logs deployment/$Release1-statsd -n $DEPLOYMENT_NS1 > statsd_$Release1.log
+kubectl logs sts/$Release1-redis -n $DEPLOYMENT_NS1 > redis_$Release1.log
 #####====================================================================================================================================================#####
+#####====================================================================================================================================================#####
+echo "Collecting General enviornment Information"
+astro version > Enviornment_Info.log
+echo "=================================================================================================" >> Enviornment_Info.log
+docker version >> Enviornment_Info.log
+###=============================================================================#####
 #####====================================================================================================================================================#####
 echo "creating GZ and zip files"
 #####====================================================================================================================================================#####
