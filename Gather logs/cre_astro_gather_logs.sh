@@ -9,7 +9,7 @@ export DEPLOYMENT_NS1=astronomer-combusting-plane-6703
 # removing astronomer- and putting as release name
 export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
-export DIR=/tmp/n
+export DIR="/tmp/n"
 #Kinfly set base domain info for your cluster 
 ##For e.g. I had a test cluster with the URL ```https://app.nandlal54.astro-cre.com`then my base domain is ```nandlal54.astro-cre.com``` ###
 #export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
