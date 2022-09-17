@@ -34,6 +34,16 @@ cd "$DIR"
 for NS in $(kubectl get ns --no-headers|grep $ASTRONOMER_NAMESPACE| awk '{print $1}'); do
     echo "creating namespace $NS Directory ";mkdir $NS 
     done
+
+
+####Gathering Describe output of bad state pods in all namespaces###
+for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
+do
+  for POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
+    echo $POD pod is in bad state;echo "Collecting Describe output of bad state pods in $NS Namespace ";kubectl describe pod $POD  > "$NS/BADpodDESCRIBE_$POD_$NS.log" -n $NS   
+    done
+done
+
 ####Gathering All the $ASTRONOMER_NAMESPACE logs###
 echo "Gathering All the $ASTRONOMER_NAMESPACE namespace logs"
 echo "Getting Pod Running status in $ASTRONOMER_NAMESPACE Namespace";kubectl get pods -o wide > "$ASTRONOMER_NAMESPACE/pods_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
@@ -55,6 +65,7 @@ echo "Getting logs of statsd in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs d
 echo "Getting logs of redis in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-kibana > "$ASTRONOMER_NAMESPACE/kibana_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Collecting Some General enviornment Information Now"
 echo "Getting Node Status";kubectl get nodes -o wide > nodes.log > "$ASTRONOMER_NAMESPACE/nodes.log"
+echo "Getting kube-system pod status";kubectl get pods -o wide -n kube-system > kube-system.log > "$ASTRONOMER_NAMESPACE/kube-system.log"
 echo "=======================Astro version output==========================================================================" > "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
 echo "Getting Astro version status";astro version  >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
 echo "=======================Docker version output==========================================================================" >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
@@ -62,6 +73,13 @@ echo "Getting Astro version status";docker version  >> "$ASTRONOMER_NAMESPACE/En
 echo "Getting helm status";helm ls -A >> "$ASTRONOMER_NAMESPACE/helm_status.log"
 echo "Getting helm history in $ASTRONOMER_NAMESPACE Namespace";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > "$ASTRONOMER_NAMESPACE/helm_history_$ASTRONOMER_RELEASE.log"
 echo "Getting helm values from $ASTRONOMER_NAMESPACE Namespace";helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > "$ASTRONOMER_NAMESPACE/helm_values_$ASTRONOMER_RELEASE.yaml"
+
+
+
+
+
+
+
 
 ####Gathering All the Deployment namespace logs###
 echo "Gathering All the Deployment namespace logs"
@@ -78,7 +96,7 @@ for NS in $(kubectl get ns --no-headers|grep -i "$ASTRONOMER_NAMESPACE-" | awk '
       echo "Getting logs of pgbouncer in $NS Namespace ";kubectl logs deployment/$Release_Name-pgbouncer -c pgbouncer > "$NS/pgbouncer _$NS.log" -n $NS    
       echo "Getting logs of flower  in $NS Namespace ";kubectl logs deployment/$Release_Name-flower > "$NS/flower _$NS.log" -n $NS
       echo "Getting logs of statsd in $NS Namespace ";kubectl logs deployment/$Release_Name-statsd > "$NS/statsd_$NS.log" -n $NS
-      echo "Getting logs of redis in $NS Namespace ";kubectl logs sts/$Release_Name-redis > "$NS/redis_$NS.log" -n $NS
+      echo "Getting logs of redis in $NS Namespace ";kubectl logs sts/$Release_Name-redis > "$NS/redis_$NS.log" -n $NS 
       echo "Getting helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/helm_history_$Release_Name.yaml"
       echo "Getting helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
     done

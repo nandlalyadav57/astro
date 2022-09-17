@@ -1,11 +1,12 @@
 
-
+======================================================================================================================================
 ****cre_astro_gather_logs****
-
+======================================================================================================================================
 We have to make sure to add below paramters in script.
 Astronomer namespace (Astronomer Namespace to collect logs)
 DIR (local directory to export the logs)
-
+It will export logs,events,helm values,node status,secrets etc.
+Also it will include describe status of pods which are not running.
 ~~~
 ASTRONOMER_NAMESPACE=
 export DIR=
@@ -205,15 +206,15 @@ Please attach the zip file or .gz file created in /tmp to the zendesk ticket for
 
 
 
-
-
-
-
-
-
 Regarding other Shell Script
-****astro_gather_logs_v1****
 
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+======================================================================================================================================
+
+****astro_gather_logs_v1****
+======================================================================================================================================
 You need to replace below parameters:
 
 Astronomer namespace (Astronomer Namespace to collect logs)

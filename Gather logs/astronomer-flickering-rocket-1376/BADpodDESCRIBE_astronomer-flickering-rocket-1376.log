@@ -1,0 +1,207 @@
+Name:         flickering-rocket-1376-scheduler-585bcfc49f-x5txg
+Namespace:    astronomer-flickering-rocket-1376
+Priority:     0
+Node:         ip-10-234-1-104.us-east-2.compute.internal/10.234.1.104
+Start Time:   Sun, 18 Sep 2022 02:22:55 +0530
+Labels:       component=scheduler
+              platform=astronomer
+              pod-template-hash=585bcfc49f
+              release=flickering-rocket-1376
+              tier=airflow
+              workspace=cl7pppnp0008114hi74ijlud9
+Annotations:  checksum/airflow-config: 700ee148fff62dbf5f0cd76348ec03baa0cfe40005a5c657dc4a04e1b34f953f
+              checksum/extra-configmaps: 2e44e493035e2f6a255d08f8104087ff10d30aef6f63176f1b18f75f73295598
+              checksum/extra-secrets: bb91ef06ddc31c0c5a29973832163d8b0b597812a793ef911d33b622bc9d1655
+              checksum/metadata-secret: fcefd92cf0ecd2ced261f7cdd1e94d25fb69e15dc272c2b4500eef829fd98f1e
+              checksum/pgbouncer-config-secret: eb3f7d711a6417fdc62193efed610cb69e29d04ac0812bbe9b71ecf3883c248d
+              checksum/result-backend-secret: 341f4dd3a49d3dfc254609a95e4c052874d123883f9842a8da6d867ad676c27b
+              cluster-autoscaler.kubernetes.io/safe-to-evict: true
+              kubernetes.io/limit-ranger:
+                LimitRanger plugin set: cpu, memory request for container scheduler-log-groomer; cpu, memory limit for container scheduler-log-groomer; cp...
+              kubernetes.io/psp: eks.privileged
+Status:       Pending
+IP:           10.234.1.13
+IPs:
+  IP:           10.234.1.13
+Controlled By:  ReplicaSet/flickering-rocket-1376-scheduler-585bcfc49f
+Init Containers:
+  wait-for-airflow-migrations:
+    Container ID:  
+    Image:         quay.io/astronomer/astro-runtime:5.0.999
+    Image ID:      
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      airflow
+      db
+      check-migrations
+      --migration-wait-timeout=60
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:                500m
+      ephemeral-storage:  2Gi
+      memory:             1920Mi
+    Requests:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             1920Mi
+    Environment:
+      AIRFLOW__ASTRONOMER__HOUSTON_JWK_URL:            https://houston.nandlal51.astro-cre.com/v1/.well-known/jwks.json
+      ASTRONOMER_ENVIRONMENT:                          software
+      AIRFLOW__WEBSERVER__UPDATE_FAB_PERMS:            True
+      AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER:        
+      ASTRONOMER__AIRFLOW__WORKER_LOG_RETENTION_DAYS:  3
+      COMPONENT:                                        (v1:metadata.labels['component'])
+      AIRFLOW__CORE__FERNET_KEY:                       <set to the key 'fernet-key' in secret 'flickering-rocket-1376-fernet-key'>              Optional: false
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN:                 <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-metadata'>        Optional: false
+      AIRFLOW_CONN_AIRFLOW_DB:                         <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-metadata'>        Optional: false
+      AIRFLOW__CELERY__CELERY_RESULT_BACKEND:          <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-result-backend'>  Optional: false
+      AIRFLOW__CELERY__RESULT_BACKEND:                 <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-result-backend'>  Optional: false
+      AIRFLOW__CELERY__BROKER_URL:                     <set to the key 'connection' in secret 'flickering-rocket-1376-broker-url'>              Optional: false
+      AIRFLOW__ELASTICSEARCH__HOST:                    <set to the key 'connection' in secret 'flickering-rocket-1376-elasticsearch'>           Optional: false
+      AIRFLOW__ELASTICSEARCH__ELASTICSEARCH_HOST:      <set to the key 'connection' in secret 'flickering-rocket-1376-elasticsearch'>           Optional: false
+    Mounts:
+      /usr/local/airflow/airflow.cfg from config (ro,path="airflow.cfg")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jjsmx (ro)
+Containers:
+  scheduler:
+    Container ID:  
+    Image:         quay.io/astronomer/astro-runtime:5.0.8
+    Image ID:      
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      bash
+      -c
+      exec airflow scheduler 1> >( tee -a /var/log/sidecar-log-consumer/out.log ) 2> >( tee -a /var/log/sidecar-log-consumer/err.log >&2 )
+    State:          Waiting
+      Reason:       PodInitializing
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:                500m
+      ephemeral-storage:  2Gi
+      memory:             1920Mi
+    Requests:
+      cpu:                500m
+      ephemeral-storage:  1Gi
+      memory:             1920Mi
+    Liveness:             exec [sh -c CONNECTION_CHECK_MAX_COUNT=0 AIRFLOW__LOGGING__LOGGING_LEVEL=ERROR exec /entrypoint \
+airflow jobs check --job-type SchedulerJob --hostname $(hostname)
+] delay=10s timeout=30s period=60s #success=1 #failure=5
+    Environment:
+      AIRFLOW__ASTRONOMER__HOUSTON_JWK_URL:            https://houston.nandlal51.astro-cre.com/v1/.well-known/jwks.json
+      ASTRONOMER_ENVIRONMENT:                          software
+      AIRFLOW__WEBSERVER__UPDATE_FAB_PERMS:            True
+      AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER:        
+      ASTRONOMER__AIRFLOW__WORKER_LOG_RETENTION_DAYS:  3
+      COMPONENT:                                        (v1:metadata.labels['component'])
+      AIRFLOW__CORE__FERNET_KEY:                       <set to the key 'fernet-key' in secret 'flickering-rocket-1376-fernet-key'>              Optional: false
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN:                 <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-metadata'>        Optional: false
+      AIRFLOW_CONN_AIRFLOW_DB:                         <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-metadata'>        Optional: false
+      AIRFLOW__CELERY__CELERY_RESULT_BACKEND:          <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-result-backend'>  Optional: false
+      AIRFLOW__CELERY__RESULT_BACKEND:                 <set to the key 'connection' in secret 'flickering-rocket-1376-airflow-result-backend'>  Optional: false
+      AIRFLOW__CELERY__BROKER_URL:                     <set to the key 'connection' in secret 'flickering-rocket-1376-broker-url'>              Optional: false
+      AIRFLOW__ELASTICSEARCH__HOST:                    <set to the key 'connection' in secret 'flickering-rocket-1376-elasticsearch'>           Optional: false
+      AIRFLOW__ELASTICSEARCH__ELASTICSEARCH_HOST:      <set to the key 'connection' in secret 'flickering-rocket-1376-elasticsearch'>           Optional: false
+    Mounts:
+      /usr/local/airflow/airflow.cfg from config (ro,path="airflow.cfg")
+      /usr/local/airflow/config/airflow_local_settings.py from config (ro,path="airflow_local_settings.py")
+      /usr/local/airflow/logs from logs (rw)
+      /usr/local/airflow/pod_templates/pod_template_file.yaml from config (ro,path="pod_template_file.yaml")
+      /var/log/sidecar-log-consumer from sidecar-log-consumer (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jjsmx (ro)
+  scheduler-log-groomer:
+    Container ID:  
+    Image:         quay.io/astronomer/astro-runtime:5.0.8
+    Image ID:      
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      /usr/local/bin/clean-airflow-logs
+    State:          Waiting
+      Reason:       PodInitializing
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  384Mi
+    Requests:
+      cpu:     100m
+      memory:  384Mi
+    Environment:
+      AIRFLOW__LOG_RETENTION_DAYS:  15
+    Mounts:
+      /usr/local/airflow/logs from logs (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jjsmx (ro)
+  sidecar-log-consumer:
+    Container ID:   
+    Image:          quay.io/astronomer/ap-vector:0.23.0
+    Image ID:       
+    Port:           <none>
+    Host Port:      <none>
+    State:          Waiting
+      Reason:       PodInitializing
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  384Mi
+    Requests:
+      cpu:     100m
+      memory:  384Mi
+    Environment:
+      VECTOR_CONFIG:  /etc/sidecar-logging/vector-config.yaml
+      SIDECAR_LOGS:   /var/log/sidecar-log-consumer
+      COMPONENT:       (v1:metadata.labels['component'])
+      RELEASE:         (v1:metadata.labels['release'])
+      WORKSPACE:       (v1:metadata.labels['workspace'])
+    Mounts:
+      /etc/sidecar-logging from config-volume (rw)
+      /var/log/sidecar-log-consumer from sidecar-log-consumer (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jjsmx (ro)
+Conditions:
+  Type              Status
+  Initialized       False 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      flickering-rocket-1376-airflow-config
+    Optional:  false
+  sidecar-log-consumer:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  config-volume:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      flickering-rocket-1376-sidecar-config
+    Optional:  false
+  logs:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-jjsmx:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Guaranteed
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  27m                    default-scheduler  Successfully assigned astronomer-flickering-rocket-1376/flickering-rocket-1376-scheduler-585bcfc49f-x5txg to ip-10-234-1-104.us-east-2.compute.internal
+  Normal   Pulling    26m (x4 over 27m)      kubelet            Pulling image "quay.io/astronomer/astro-runtime:5.0.999"
+  Warning  Failed     26m (x4 over 27m)      kubelet            Failed to pull image "quay.io/astronomer/astro-runtime:5.0.999": rpc error: code = Unknown desc = Error response from daemon: manifest for quay.io/astronomer/astro-runtime:5.0.999 not found: manifest unknown: manifest unknown
+  Warning  Failed     26m (x4 over 27m)      kubelet            Error: ErrImagePull
+  Warning  Failed     25m (x6 over 27m)      kubelet            Error: ImagePullBackOff
+  Normal   BackOff    2m36s (x109 over 27m)  kubelet            Back-off pulling image "quay.io/astronomer/astro-runtime:5.0.999"
