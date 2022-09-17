@@ -3,7 +3,7 @@ timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 # Put the name of the astronomer ASTRONOMER_NAMESPACE below
 export ASTRONOMER_NAMESPACE=astronomer
 #Get Astronomer Release name
-export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "astronomer"|head -n1 | awk '{ print $2}')
+export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "astronomer"|head -n1 | awk '{ print $1}')
 # Put the name of the deployment ASTRONOMER_NAMESPACE 1 where we are having issues
 export DEPLOYMENT_NS1=astronomer-combusting-plane-6703
 # removing astronomer- and putting as release name
