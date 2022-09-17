@@ -22,8 +22,8 @@ echo "Your astronomer release name is $ASTRONOMER_RELEASE."
 #echo $DEPLOYMENT_NS1
 #echo $Release1
 echo "The path where logs would be stored is $DIR."
-echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
-echo "Mail would be sent to $mail using mutt package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
+#echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
+#echo "Mail would be sent to $mail using mutt & sendmail package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
 #####====================================================================================================================================================#####
 mkdir -p "$DIR"
 chmod -R 777 "$DIR"
