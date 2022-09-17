@@ -10,8 +10,8 @@ export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "astronomer"|head -n1 | awk '{ pr
 #export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
 export DIR="/tmp/n"
-export Ticket=12149
-export mail=nandlal.yadav@astronomer.io
+#export Ticket=12149
+#export mail="nandlalyadav57@yahoo.in"
 #Kinfly set base domain info for your cluster 
 ##For e.g. I had a test cluster with the URL ```https://app.nandlal54.astro-cre.com`then my base domain is ```nandlal54.astro-cre.com``` ###
 #export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
@@ -86,13 +86,18 @@ for NS in $(kubectl get ns --no-headers|grep -i "$ASTRONOMER_NAMESPACE-" | awk '
 echo "creating GZ and zip files"
 #####====================================================================================================================================================#####
 cd ..
+
 tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
 zip -r "$DIR".zip "$DIR"
-timeout 15s
+cdir=$PWD
+echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
+#echo "Timing out for 30 sec for zip file to be present before sending"
+#@timeout /t 30
 #####====================================================================================================================================================#####
-echo "Sharing the logs via mail for troubleshooting"
-echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -a $DIR"_$(date +%F).tar.gz -s "Platform logs for troubleshooting $Ticket" -- $mail
+#echo "Sharing the logs via mail for troubleshooting"
+#echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -a $DIR"_$(date +%F).tar.gz -s "Platform logs for troubleshooting $Ticket" -- $mail
 #####====================================================================================================================================================#####
+#echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -s "Platform logs for troubleshooting $Ticket" -- $mail
 
 
 
