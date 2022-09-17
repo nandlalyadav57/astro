@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 # Put the name of the astronomer ASTRONOMER_NAMESPACE below
 export ASTRONOMER_NAMESPACE=astronomer
@@ -62,8 +62,8 @@ echo "Getting logs of flower  in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs 
 echo "Getting logs of statsd in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-kube-state > "$ASTRONOMER_NAMESPACE/kube-state_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Getting logs of redis in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-kibana > "$ASTRONOMER_NAMESPACE/kibana_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Collecting Some General enviornment Information Now"
-echo "Getting Node Status";kubectl get nodes -o wide > nodes.log > "$ASTRONOMER_NAMESPACE/nodes.log"
-echo "Getting kube-system pod status";kubectl get pods -o wide -n kube-system > kube-system.log > "$ASTRONOMER_NAMESPACE/kube-system.log"
+echo "Getting Node Status";kubectl get nodes -o wide > "$ASTRONOMER_NAMESPACE/nodes.log"
+echo "Getting kube-system pod status";kubectl get pods -o wide -n kube-system > "$ASTRONOMER_NAMESPACE/kube-system.log" 
 echo "=======================Astro version output==========================================================================" > "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
 echo "Getting Astro version status";astro version  >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
 echo "=======================Docker version output==========================================================================" >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
