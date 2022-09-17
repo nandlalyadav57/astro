@@ -10,16 +10,20 @@ export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "astronomer"|head -n1 | awk '{ pr
 #export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
 export DIR="/tmp/n"
+export Ticket=12149
+export mail=nandlal.yadav@astronomer.io
 #Kinfly set base domain info for your cluster 
 ##For e.g. I had a test cluster with the URL ```https://app.nandlal54.astro-cre.com`then my base domain is ```nandlal54.astro-cre.com``` ###
 #export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
 #astro auth login $BASEDOMAIN
 #####====================================================================================================================================================#####
-echo $ASTRONOMER_NAMESPACE
-echo $ASTRONOMER_RELEASE
-echo $DEPLOYMENT_NS1
-echo $Release1
-echo "$DIR"
+echo "You have specied $ASTRONOMER_NAMESPACE as a namespace where all the core Astronomer platform pods are running.Please make sure it's correctly specified."
+echo "Your astronomer release name is $ASTRONOMER_RELEASE."
+#echo $DEPLOYMENT_NS1
+#echo $Release1
+echo "The path where logs would be stored is $DIR."
+echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
+echo "Mail would be sent to $mail using mutt package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
 #####====================================================================================================================================================#####
 mkdir -p "$DIR"
 chmod -R 777 "$DIR"
@@ -56,8 +60,8 @@ echo "Getting Astro version status";astro version  >> "$ASTRONOMER_NAMESPACE/Env
 echo "=======================Docker version output==========================================================================" >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
 echo "Getting Astro version status";docker version  >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
 echo "Getting helm status";helm ls -A >> "$ASTRONOMER_NAMESPACE/helm_status.log"
-echo "Getting helm history in $ASTRONOMER_NAMESPACE Namespace $";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > helm_history_$ASTRONOMER_RELEASE.log
-echo "Getting helm values from $ASTRONOMER_NAMESPACE Namespace $";helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > helm_values_$ASTRONOMER_RELEASE.yaml 
+echo "Getting helm history in $ASTRONOMER_NAMESPACE Namespace";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > "$ASTRONOMER_NAMESPACE/helm_history_$ASTRONOMER_RELEASE.log"
+echo "Getting helm values from $ASTRONOMER_NAMESPACE Namespace";helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > "$ASTRONOMER_NAMESPACE/helm_values_$ASTRONOMER_RELEASE.yaml"
 
 ####Gathering All the Deployment namespace logs###
 echo "Gathering All the Deployment namespace logs"
@@ -66,6 +70,7 @@ for NS in $(kubectl get ns --no-headers|grep -i "$ASTRONOMER_NAMESPACE-" | awk '
       echo "Getting events in $NS Namespace ";kubectl get events > "$NS/events_$NS.log" -n $NS
       echo "Getting secrets in $NS Namespace ";kubectl get secrets > "$NS/secrets_$NS.log" -n $NS
       echo "export release name ";export Release_Name=$(echo $NS| cut -c 12-)
+      echo "Your Release_Name in current namespace is $Release_Name."
       echo "Getting logs of scheduler in $NS Namespace ";kubectl logs deployment/$Release_Name-scheduler -c scheduler > "$NS/scheduler_$NS.log" -n $NS  
       echo "Getting logs of worker in $NS Namespace ";kubectl logs deployment/$Release_Name-worker -c worker > "$NS/worker_$NS.log" -n $NS
       echo "Getting logs of webserverin $NS Namespace ";kubectl logs deployment/$Release_Name-webserver -c webserver > "$NS/webserver$NS.log" -n $NS
@@ -74,8 +79,8 @@ for NS in $(kubectl get ns --no-headers|grep -i "$ASTRONOMER_NAMESPACE-" | awk '
       echo "Getting logs of flower  in $NS Namespace ";kubectl logs deployment/$Release_Name-flower > "$NS/flower _$NS.log" -n $NS
       echo "Getting logs of statsd in $NS Namespace ";kubectl logs deployment/$Release_Name-statsd > "$NS/statsd_$NS.log" -n $NS
       echo "Getting logs of redis in $NS Namespace ";kubectl logs sts/$Release_Name-redis > "$NS/redis_$NS.log" -n $NS
-      echo "Getting helm history in $NS Namespace $";helm history Release_Name -n $NS> helm_history_Release_Name.log
-      echo "Getting helm values from $NS Namespace $";helm get values Release_Name -n $NS-o yaml > helm_values_Release_Name.yaml 
+      echo "Getting helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/helm_history_$Release_Name.yaml"
+      echo "Getting helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
     done
 #####====================================================================================================================================================#####
 echo "creating GZ and zip files"
@@ -83,8 +88,10 @@ echo "creating GZ and zip files"
 cd ..
 tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
 zip -r "$DIR".zip "$DIR"
+timeout 15s
 #####====================================================================================================================================================#####
-echo "Share the log or zip file for troubleshooting"
+echo "Sharing the logs via mail for troubleshooting"
+echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -a $DIR"_$(date +%F).tar.gz -s "Platform logs for troubleshooting $Ticket" -- $mail
 #####====================================================================================================================================================#####
 
 
