@@ -12,8 +12,8 @@ export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 export DIR=/tmp/n
 #Kinfly set base domain info for your cluster 
 ##For e.g. I had a test cluster with the URL ```https://app.nandlal54.astro-cre.com`then my base domain is ```nandlal54.astro-cre.com``` ###
-#export BASEDOMAIN=nandlal51.astro-cre.com
-#astro auth login  $BASEDOMAIN
+#export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
+#astro auth login $BASEDOMAIN
 #####====================================================================================================================================================#####
 echo $ASTRONOMER_NAMESPACE
 echo $ASTRONOMER_RELEASE
@@ -25,6 +25,7 @@ mkdir -p $DIR
 chmod -R 777 $DIR
 cd $DIR
 ####creating namespace Directories###
+#!/bin/bash
 for NS in $(kubectl get ns --no-headers|grep astronomer | awk '{print $1}'); do
     echo "creating namespace $NS Directory ";mkdir $NS 
     done
@@ -50,8 +51,9 @@ for $ASTRONOMER_NAMESPACE
       echo "Getting logs of redis in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-kibana > "$ASTRONOMER_NAMESPACE/kibana_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
       echo "Collecting Some General enviornment Information Now"
       echo "Getting Node Status";kubectl get nodes -o wide > nodes.log > "$ASTRONOMER_NAMESPACE/nodes.log"
-      echo "Getting Astro version status";astro version  > "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
-      echo "=================================================================================================" >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
+      echo "=======================Astro version output==========================================================================" > "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
+      echo "Getting Astro version status";astro version  >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
+      echo "=======================Docker version output==========================================================================" >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
       echo "Getting Astro version status";docker version  >> "$ASTRONOMER_NAMESPACE/Enviornment_Info.log"
       echo "Getting helm status";helm ls -A >> "$ASTRONOMER_NAMESPACE/helm_status.log"
       echo "Getting helm history in $ASTRONOMER_NAMESPACE Namespace $";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > helm_history_$ASTRONOMER_RELEASE.log
@@ -78,6 +80,7 @@ for NS in $(kubectl get ns --no-headers|grep -i "$ASTRONOMER_NAMESPACE-" | awk '
 #####====================================================================================================================================================#####
 echo "creating GZ and zip files"
 #####====================================================================================================================================================#####
+cd ..
 tar -czvf $DIR_$(date +%F).tar.gz $DIR
 zip -r $DIR.zip $DIR
 #####====================================================================================================================================================#####
