@@ -17,14 +17,17 @@ export DIR="/tmp/n"
 #export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
 #astro auth login $BASEDOMAIN
 #####====================================================================================================================================================#####
-echo "You have specied $ASTRONOMER_NAMESPACE as a namespace where all the core Astronomer platform pods are running.Please make sure it's correctly specified."
-echo "Your astronomer release name is $ASTRONOMER_RELEASE."
+echo "====> Here is the list of Namespaces found:"
+kubectl get namespaces
+echo "====> You have specied $ASTRONOMER_NAMESPACE as a namespace where all the core Astronomer platform pods are running.Please make sure it's correctly specified."
+echo "====> Your astronomer release name is $ASTRONOMER_RELEASE."
 #echo $DEPLOYMENT_NS1
 #echo $Release1
-echo "The path where logs would be stored is $DIR."
+echo "====> The path where logs would be stored is $DIR."
 #echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
 #echo "Mail would be sent to $mail using mutt & sendmail package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
 #####====================================================================================================================================================#####
+echo "====> Creating log file directory $DIR."
 mkdir -p "$DIR"
 chmod -R 777 "$DIR"
 ###https://stackoverflow.com/questions/589149/bash-script-to-cd-to-directory-with-spaces-in-pathname
@@ -69,7 +72,7 @@ echo "Gathering logs of elasticsearch-master in $ASTRONOMER_NAMESPACE Namespace 
 echo "Gathering logs of elasticsearch-data in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-elasticsearch-data > "$ASTRONOMER_NAMESPACE/elasticsearch-data_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE  
 echo "Gathering logs of stan in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-stan -c stan > "$ASTRONOMER_NAMESPACE/stan_contatiner_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of registry in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-registry > "$ASTRONOMER_NAMESPACE/registry$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of prometheus in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer- -c prometheus   > "$ASTRONOMER_NAMESPACE/prometheus_container_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
+echo "Gathering logs of prometheus in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-prometheus  -c prometheus   > "$ASTRONOMER_NAMESPACE/prometheus_container_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of nats in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-nats -c nats  > "$ASTRONOMER_NAMESPACE/nats_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of alertmanager in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-alertmanager -c alertmanager  > "$ASTRONOMER_NAMESPACE/alertmanager_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "======================Collecting Some General enviornment Information in the $ASTRONOMER_NAMESPACE======================"
@@ -128,6 +131,9 @@ cd ..
 tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
 zip -r "$DIR".zip "$DIR"
 cdir=$PWD
+echo "Here is the list of files created:"
+ls -lhtr $DIR/*
+ls -lhtr /tmp/n/$ASTRONOMER_NAMESPACE*
 echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
 #echo "Timing out for 30 sec for zip file to be present before sending"
 #@timeout /t 30
