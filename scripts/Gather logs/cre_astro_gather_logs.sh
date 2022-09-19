@@ -127,11 +127,13 @@ echo "======================Gathering All the Deployment namespace logs in the $
 #####====================================================================================================================================================#####
 echo "======================creating GZ and zip files======================"
 #####====================================================================================================================================================#####
+cd "$DIR"
 cd ..
 tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
 zip -r "$DIR"_$(date +%F).zip "$DIR"
 cdir=$PWD
 echo "Here is the list of files created:"
+ls -lhtr *
 ls -lhtr $DIR/*
 ls -lhtr /tmp/astro_logs/$ASTRONOMER_NAMESPACE*
 echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
