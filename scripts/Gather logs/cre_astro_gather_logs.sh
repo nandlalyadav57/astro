@@ -9,7 +9,7 @@ export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "$ASTRONOMER_NAMESPACE"|head -n1 
 # removing astronomer- and putting as release name
 #export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
-export DIR="/tmp/n"
+export DIR="/tmp/astro_logs"
 #export Ticket=12149
 #export mail="nandlalyadav57@yahoo.in"
 #Kinfly set base domain info for your cluster 
@@ -129,11 +129,11 @@ echo "======================creating GZ and zip files======================"
 #####====================================================================================================================================================#####
 cd ..
 tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
-zip -r "$DIR".zip "$DIR"
+zip -r "$DIR"_$(date +%F).zip "$DIR"
 cdir=$PWD
 echo "Here is the list of files created:"
 ls -lhtr $DIR/*
-ls -lhtr /tmp/n/$ASTRONOMER_NAMESPACE*
+ls -lhtr /tmp/astro_logs/$ASTRONOMER_NAMESPACE*
 echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
 #echo "Timing out for 30 sec for zip file to be present before sending"
 #@timeout /t 30
