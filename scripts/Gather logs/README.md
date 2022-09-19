@@ -52,27 +52,25 @@ Expected output:
 ~~~
 [root@DESKTOP-JJ9MM59 Gather logs]# sh cre_astro_gather_logs.sh
 ====> Here is the list of Namespaces found:
-NAME                                STATUS   AGE
-astronomer                          Active   12d
-astronomer-combusting-plane-6703    Active   11d
-astronomer-flickering-rocket-1376   Active   12h
-cluster-autoscaler                  Active   12d
-default                             Active   12d
-kube-node-lease                     Active   12d
-kube-public                         Active   12d
-kube-system                         Active   12d
+NAME                                    STATUS   AGE
+astronomer                              Active   13d
+astronomer-combusting-plane-6703        Active   12d
+astronomer-interstellar-ecliptic-1909   Active   4m51s
+cluster-autoscaler                      Active   13d
+default                                 Active   13d
+kube-node-lease                         Active   13d
+kube-public                             Active   13d
+kube-system                             Active   13d
 ====> You have specied astronomer as a namespace where all the core Astronomer platform pods are running.Please make sure it's correctly specified.
 ====> Your astronomer release name is astronomer.
-====> The path where logs would be stored is /tmp/n.
-====> Creating log file directory /tmp/n.
+====> The path where logs would be stored is /tmp/astro_logs.
+====> Creating log file directory /tmp/astro_logs.
 creating namespace astronomer Directory
 creating namespace astronomer-combusting-plane-6703 Directory
-creating namespace astronomer-flickering-rocket-1376 Directory
+creating namespace astronomer-interstellar-ecliptic-1909 Directory
 ======================Gathering Describe output of Bad state pod======================
-flickering-rocket-1376-scheduler-585bcfc49f-kmqnv pod is in bad state
-Collecting Describe output of bad state pods in astronomer-flickering-rocket-1376 Namespace
-flickering-rocket-1376-scheduler-585bcfc49f-x5txg pod is in bad state
-Collecting Describe output of bad state pods in astronomer-flickering-rocket-1376 Namespace
+interstellar-ecliptic-1909-flower-676d54b6b4-bp2bx pod is in bad state
+Collecting Describe output of bad state pods in astronomer-interstellar-ecliptic-1909 Namespace
 No resources found in default namespace.
 No resources found in kube-node-lease namespace.
 No resources found in kube-public namespace.
@@ -163,390 +161,394 @@ Gathering logs of statsd in astronomer-combusting-plane-6703 Namespace
 Gathering logs of redis in astronomer-combusting-plane-6703 Namespace
 Gathering helm history in astronomer-combusting-plane-6703 Namespace
 Gathering helm values from astronomer-combusting-plane-6703 Namespace
-======================Collecting Some General enviornment Information in the astronomer-flickering-rocket-1376======================
-Gathering get all status  in astronomer-flickering-rocket-1376 Namespace
+======================Collecting Some General enviornment Information in the astronomer-interstellar-ecliptic-1909======================
+Gathering get all status  in astronomer-interstellar-ecliptic-1909 Namespace
 Gathering All replica status in all namespaces
-Gathering Pod Running status in astronomer-flickering-rocket-1376 Namespace
-Gathering events in astronomer-flickering-rocket-1376 Namespace
-Gathering secrets in astronomer-flickering-rocket-1376 Namespace
-Gathering sevice Status in astronomer-flickering-rocket-1376 Namespace
-Gathering persistent volume Status in astronomer-flickering-rocket-1376 Namespace
-Gathering ingress Status in astronomer-flickering-rocket-1376 Namespace
-Gathering cronjobs Status in astronomer-flickering-rocket-1376 Namespace
-Gathering jobs Status in astronomer-flickering-rocket-1376 Namespace
+Gathering Pod Running status in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering events in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering secrets in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering sevice Status in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering persistent volume Status in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering ingress Status in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering cronjobs Status in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering jobs Status in astronomer-interstellar-ecliptic-1909 Namespace
+No resources found in astronomer-interstellar-ecliptic-1909 namespace.
 Exporting Release name
-Your Release_Name in current namespace is flickering-rocket-1376.
-======================Gathering All the Deployment namespace logs in the astronomer-flickering-rocket-1376======================
-Gathering logs of scheduler in astronomer-flickering-rocket-1376 Namespace
-Found 2 pods, using pod/flickering-rocket-1376-scheduler-585bcfc49f-kmqnv
-Error from server (BadRequest): container "scheduler" in pod "flickering-rocket-1376-scheduler-585bcfc49f-kmqnv" is waiting to start: PodInitializing
-Gathering logs of worker in astronomer-flickering-rocket-1376 Namespace
-Gathering logs of webserverin astronomer-flickering-rocket-1376 Namespace
-Gathering logs of triggerer in astronomer-flickering-rocket-1376 Namespace
-Gathering logs of pgbouncer in astronomer-flickering-rocket-1376 Namespace
-Gathering logs of flower  in astronomer-flickering-rocket-1376 Namespace
-Gathering logs of statsd in astronomer-flickering-rocket-1376 Namespace
-Gathering logs of redis in astronomer-flickering-rocket-1376 Namespace
-Gathering helm history in astronomer-flickering-rocket-1376 Namespace
-Gathering helm values from astronomer-flickering-rocket-1376 Namespace
+Your Release_Name in current namespace is interstellar-ecliptic-1909.
+======================Gathering All the Deployment namespace logs in the astronomer-interstellar-ecliptic-1909======================
+Gathering logs of scheduler in astronomer-interstellar-ecliptic-1909 Namespace
+Found 2 pods, using pod/interstellar-ecliptic-1909-scheduler-bd46dd4f4-jzfvj
+Gathering logs of worker in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering logs of webserverin astronomer-interstellar-ecliptic-1909 Namespace
+Gathering logs of triggerer in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering logs of pgbouncer in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering logs of flower  in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering logs of statsd in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering logs of redis in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering helm history in astronomer-interstellar-ecliptic-1909 Namespace
+Gathering helm values from astronomer-interstellar-ecliptic-1909 Namespace
 ======================creating GZ and zip files======================
 tar: Removing leading `/' from member names
-/tmp/n/
-/tmp/n/astronomer-combusting-plane-6703/
-/tmp/n/astronomer-combusting-plane-6703/helm_values_combusting-plane-6703.yaml
-/tmp/n/astronomer-combusting-plane-6703/pgbouncer _astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/triggerer astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/rs_status_all_namespaces.log
-/tmp/n/astronomer-combusting-plane-6703/getall_status_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/svc_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/pvc_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/statsd_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/pods_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/redis_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/webserverastronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/cronjobs_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/helm_history_combusting-plane-6703.yaml
-/tmp/n/astronomer-combusting-plane-6703/ingress_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/events_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/scheduler_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/flower _astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/worker_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-combusting-plane-6703/secrets_astronomer-combusting-plane-6703.log
-/tmp/n/astronomer-flickering-rocket-1376/
-/tmp/n/astronomer-flickering-rocket-1376/cronjobs_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/secrets_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/statsd_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/flower _astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/rs_status_all_namespaces.log
-/tmp/n/astronomer-flickering-rocket-1376/scheduler_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/BADpodDESCRIBE_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/pods_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/worker_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/svc_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/events_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/getall_status_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/redis_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/ingress_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/webserverastronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/triggerer astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/helm_values_flickering-rocket-1376.yaml
-/tmp/n/astronomer-flickering-rocket-1376/pgbouncer _astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/pvc_astronomer-flickering-rocket-1376.log
-/tmp/n/astronomer-flickering-rocket-1376/helm_history_flickering-rocket-1376.yaml
-/tmp/n/astronomer/
-/tmp/n/astronomer/DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log
-/tmp/n/astronomer/houston-workerastronomer.log
-/tmp/n/astronomer/nodes.log
-/tmp/n/astronomer/nginx-default-backend_astronomer.log
-/tmp/n/astronomer/alertmanager_astronomer.log
-/tmp/n/astronomer/kube-state_astronomer.log
-/tmp/n/astronomer/secrets_astronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log
-/tmp/n/astronomer/nginx_astronomer.log
-/tmp/n/astronomer/svc_astronomer.log
-/tmp/n/astronomer/kibana_astronomer.log
-/tmp/n/astronomer/rs_status_all_namespaces.log
-/tmp/n/astronomer/ingress_astronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log
-/tmp/n/astronomer/stan_contatiner_astronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log
-/tmp/n/astronomer/cli-install_astronomer.log
-/tmp/n/astronomer/helm_history_astronomer.log
-/tmp/n/astronomer/cronjobs_astronomer.log
-/tmp/n/astronomer/helm_values_astronomer.yaml
-/tmp/n/astronomer/prometheus_container_astronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log
-/tmp/n/astronomer/elasticsearch-master_astronomer.log
-/tmp/n/astronomer/helm_status.log
-/tmp/n/astronomer/events_astronomer.log
-/tmp/n/astronomer/kube-system.log
-/tmp/n/astronomer/getall_status_astronomer.log
-/tmp/n/astronomer/elasticsearch-data_astronomer.log
-/tmp/n/astronomer/pvc_astronomer.log
-/tmp/n/astronomer/elasticsearch-clientastronomer.log
-/tmp/n/astronomer/registryastronomer.log
-/tmp/n/astronomer/commanderastronomer.log
-/tmp/n/astronomer/nats_astronomer.log
-/tmp/n/astronomer/houstonastronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log
-/tmp/n/astronomer/elasticsearch-nginx_astronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log
-/tmp/n/astronomer/astro-uiastronomer.log
-/tmp/n/astronomer/pods_astronomer.log
-/tmp/n/astronomer/Enviornment_Info.log
-/tmp/n/astronomer/grafana_astronomer.log
-/tmp/n/astronomer/DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log
-  adding: tmp/n/ (stored 0%)
-  adding: tmp/n/astronomer-combusting-plane-6703/ (stored 0%)
-  adding: tmp/n/astronomer-combusting-plane-6703/helm_values_combusting-plane-6703.yaml (deflated 78%)
-  adding: tmp/n/astronomer-combusting-plane-6703/pgbouncer _astronomer-combusting-plane-6703.log (deflated 89%)
-  adding: tmp/n/astronomer-combusting-plane-6703/triggerer astronomer-combusting-plane-6703.log (deflated 85%)
-  adding: tmp/n/astronomer-combusting-plane-6703/rs_status_all_namespaces.log (deflated 67%)
-  adding: tmp/n/astronomer-combusting-plane-6703/getall_status_astronomer-combusting-plane-6703.log (deflated 83%)
-  adding: tmp/n/astronomer-combusting-plane-6703/svc_astronomer-combusting-plane-6703.log (deflated 65%)
-  adding: tmp/n/astronomer-combusting-plane-6703/pvc_astronomer-combusting-plane-6703.log (deflated 42%)
-  adding: tmp/n/astronomer-combusting-plane-6703/statsd_astronomer-combusting-plane-6703.log (deflated 49%)
-  adding: tmp/n/astronomer-combusting-plane-6703/pods_astronomer-combusting-plane-6703.log (deflated 76%)
-  adding: tmp/n/astronomer-combusting-plane-6703/redis_astronomer-combusting-plane-6703.log (deflated 90%)
-  adding: tmp/n/astronomer-combusting-plane-6703/webserverastronomer-combusting-plane-6703.log (deflated 97%)
-  adding: tmp/n/astronomer-combusting-plane-6703/cronjobs_astronomer-combusting-plane-6703.log (deflated 62%)
-  adding: tmp/n/astronomer-combusting-plane-6703/helm_history_combusting-plane-6703.yaml (deflated 63%)
-  adding: tmp/n/astronomer-combusting-plane-6703/ingress_astronomer-combusting-plane-6703.log (deflated 68%)
-  adding: tmp/n/astronomer-combusting-plane-6703/events_astronomer-combusting-plane-6703.log (deflated 88%)
-  adding: tmp/n/astronomer-combusting-plane-6703/scheduler_astronomer-combusting-plane-6703.log (deflated 93%)
-  adding: tmp/n/astronomer-combusting-plane-6703/flower _astronomer-combusting-plane-6703.log (deflated 65%)
-  adding: tmp/n/astronomer-combusting-plane-6703/worker_astronomer-combusting-plane-6703.log (deflated 86%)
-  adding: tmp/n/astronomer-combusting-plane-6703/secrets_astronomer-combusting-plane-6703.log (deflated 85%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/ (stored 0%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/cronjobs_astronomer-flickering-rocket-1376.log (deflated 62%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/secrets_astronomer-flickering-rocket-1376.log (deflated 84%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/statsd_astronomer-flickering-rocket-1376.log (deflated 48%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/flower _astronomer-flickering-rocket-1376.log (deflated 65%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/rs_status_all_namespaces.log (deflated 69%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/scheduler_astronomer-flickering-rocket-1376.log (stored 0%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/BADpodDESCRIBE_astronomer-flickering-rocket-1376.log (deflated 75%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/pods_astronomer-flickering-rocket-1376.log (deflated 76%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/worker_astronomer-flickering-rocket-1376.log (deflated 93%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/svc_astronomer-flickering-rocket-1376.log (deflated 65%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/events_astronomer-flickering-rocket-1376.log (deflated 88%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/getall_status_astronomer-flickering-rocket-1376.log (deflated 79%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/redis_astronomer-flickering-rocket-1376.log (deflated 82%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/ingress_astronomer-flickering-rocket-1376.log (deflated 69%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/webserverastronomer-flickering-rocket-1376.log (deflated 97%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/triggerer astronomer-flickering-rocket-1376.log (deflated 68%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/helm_values_flickering-rocket-1376.yaml (deflated 79%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/pgbouncer _astronomer-flickering-rocket-1376.log (deflated 91%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/pvc_astronomer-flickering-rocket-1376.log (deflated 42%)
-  adding: tmp/n/astronomer-flickering-rocket-1376/helm_history_flickering-rocket-1376.yaml (deflated 25%)
-  adding: tmp/n/astronomer/ (stored 0%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log (deflated 71%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log (deflated 70%)
-  adding: tmp/n/astronomer/houston-workerastronomer.log (deflated 87%)
-  adding: tmp/n/astronomer/nodes.log (deflated 85%)
-  adding: tmp/n/astronomer/nginx-default-backend_astronomer.log (deflated 97%)
-  adding: tmp/n/astronomer/alertmanager_astronomer.log (deflated 61%)
-  adding: tmp/n/astronomer/kube-state_astronomer.log (deflated 55%)
-  adding: tmp/n/astronomer/secrets_astronomer.log (deflated 85%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log (deflated 71%)
-  adding: tmp/n/astronomer/nginx_astronomer.log (deflated 94%)
-  adding: tmp/n/astronomer/svc_astronomer.log (deflated 85%)
-  adding: tmp/n/astronomer/kibana_astronomer.log (deflated 98%)
-  adding: tmp/n/astronomer/rs_status_all_namespaces.log (deflated 83%)
-  adding: tmp/n/astronomer/ingress_astronomer.log (deflated 83%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log (deflated 70%)
-  adding: tmp/n/astronomer/stan_contatiner_astronomer.log (deflated 88%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log (deflated 71%)
-  adding: tmp/n/astronomer/cli-install_astronomer.log (deflated 97%)
-  adding: tmp/n/astronomer/helm_history_astronomer.log (deflated 74%)
-  adding: tmp/n/astronomer/cronjobs_astronomer.log (deflated 79%)
-  adding: tmp/n/astronomer/helm_values_astronomer.yaml (deflated 44%)
-  adding: tmp/n/astronomer/prometheus_container_astronomer.log (deflated 92%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log (deflated 71%)
-  adding: tmp/n/astronomer/elasticsearch-master_astronomer.log (deflated 87%)
-  adding: tmp/n/astronomer/helm_status.log (deflated 61%)
-  adding: tmp/n/astronomer/events_astronomer.log (deflated 82%)
-  adding: tmp/n/astronomer/kube-system.log (deflated 86%)
-  adding: tmp/n/astronomer/getall_status_astronomer.log (deflated 90%)
-  adding: tmp/n/astronomer/elasticsearch-data_astronomer.log (deflated 87%)
-  adding: tmp/n/astronomer/pvc_astronomer.log (deflated 70%)
-  adding: tmp/n/astronomer/elasticsearch-clientastronomer.log (deflated 88%)
-  adding: tmp/n/astronomer/registryastronomer.log (deflated 98%)
-  adding: tmp/n/astronomer/commanderastronomer.log (deflated 91%)
-  adding: tmp/n/astronomer/nats_astronomer.log (deflated 73%)
-  adding: tmp/n/astronomer/houstonastronomer.log (deflated 94%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log (deflated 71%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log (deflated 73%)
-  adding: tmp/n/astronomer/elasticsearch-nginx_astronomer.log (deflated 97%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log (deflated 71%)
-  adding: tmp/n/astronomer/astro-uiastronomer.log (deflated 98%)
-  adding: tmp/n/astronomer/pods_astronomer.log (deflated 87%)
-  adding: tmp/n/astronomer/Enviornment_Info.log (deflated 62%)
-  adding: tmp/n/astronomer/grafana_astronomer.log (deflated 93%)
-  adding: tmp/n/astronomer/DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log (deflated 71%)
+/tmp/astro_logs/
+/tmp/astro_logs/astronomer-combusting-plane-6703/
+/tmp/astro_logs/astronomer-combusting-plane-6703/helm_values_combusting-plane-6703.yaml
+/tmp/astro_logs/astronomer-combusting-plane-6703/pgbouncer _astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/triggerer astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/rs_status_all_namespaces.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/getall_status_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/svc_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/pvc_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/statsd_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/pods_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/redis_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/webserverastronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/cronjobs_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/helm_history_combusting-plane-6703.yaml
+/tmp/astro_logs/astronomer-combusting-plane-6703/ingress_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/events_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/scheduler_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/flower _astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/worker_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer-combusting-plane-6703/secrets_astronomer-combusting-plane-6703.log
+/tmp/astro_logs/astronomer/
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/houston-workerastronomer.log
+/tmp/astro_logs/astronomer/nodes.log
+/tmp/astro_logs/astronomer/nginx-default-backend_astronomer.log
+/tmp/astro_logs/astronomer/alertmanager_astronomer.log
+/tmp/astro_logs/astronomer/kube-state_astronomer.log
+/tmp/astro_logs/astronomer/secrets_astronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/nginx_astronomer.log
+/tmp/astro_logs/astronomer/svc_astronomer.log
+/tmp/astro_logs/astronomer/kibana_astronomer.log
+/tmp/astro_logs/astronomer/rs_status_all_namespaces.log
+/tmp/astro_logs/astronomer/ingress_astronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/stan_contatiner_astronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/cli-install_astronomer.log
+/tmp/astro_logs/astronomer/helm_history_astronomer.log
+/tmp/astro_logs/astronomer/cronjobs_astronomer.log
+/tmp/astro_logs/astronomer/helm_values_astronomer.yaml
+/tmp/astro_logs/astronomer/prometheus_container_astronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/elasticsearch-master_astronomer.log
+/tmp/astro_logs/astronomer/helm_status.log
+/tmp/astro_logs/astronomer/events_astronomer.log
+/tmp/astro_logs/astronomer/kube-system.log
+/tmp/astro_logs/astronomer/getall_status_astronomer.log
+/tmp/astro_logs/astronomer/elasticsearch-data_astronomer.log
+/tmp/astro_logs/astronomer/pvc_astronomer.log
+/tmp/astro_logs/astronomer/elasticsearch-clientastronomer.log
+/tmp/astro_logs/astronomer/registryastronomer.log
+/tmp/astro_logs/astronomer/commanderastronomer.log
+/tmp/astro_logs/astronomer/nats_astronomer.log
+/tmp/astro_logs/astronomer/houstonastronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/elasticsearch-nginx_astronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer/astro-uiastronomer.log
+/tmp/astro_logs/astronomer/pods_astronomer.log
+/tmp/astro_logs/astronomer/Enviornment_Info.log
+/tmp/astro_logs/astronomer/grafana_astronomer.log
+/tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/pods_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/helm_values_interstellar-ecliptic-1909.yaml
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/pgbouncer _astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/events_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/helm_history_interstellar-ecliptic-1909.yaml
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/BADpodDESCRIBE_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/worker_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/rs_status_all_namespaces.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/pvc_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/scheduler_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/triggerer astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/svc_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/cronjobs_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/statsd_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/getall_status_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/ingress_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/secrets_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/flower _astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/redis_astronomer-interstellar-ecliptic-1909.log
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909/webserverastronomer-interstellar-ecliptic-1909.log
+  adding: tmp/astro_logs/ (stored 0%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/ (stored 0%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/helm_values_combusting-plane-6703.yaml (deflated 78%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/pgbouncer _astronomer-combusting-plane-6703.log (deflated 89%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/triggerer astronomer-combusting-plane-6703.log (deflated 85%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/rs_status_all_namespaces.log (deflated 67%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/getall_status_astronomer-combusting-plane-6703.log (deflated 83%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/svc_astronomer-combusting-plane-6703.log (deflated 65%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/pvc_astronomer-combusting-plane-6703.log (deflated 42%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/statsd_astronomer-combusting-plane-6703.log (deflated 49%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/pods_astronomer-combusting-plane-6703.log (deflated 75%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/redis_astronomer-combusting-plane-6703.log (deflated 90%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/webserverastronomer-combusting-plane-6703.log (deflated 97%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/cronjobs_astronomer-combusting-plane-6703.log (deflated 63%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/helm_history_combusting-plane-6703.yaml (deflated 63%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/ingress_astronomer-combusting-plane-6703.log (deflated 68%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/events_astronomer-combusting-plane-6703.log (deflated 86%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/scheduler_astronomer-combusting-plane-6703.log (deflated 93%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/flower _astronomer-combusting-plane-6703.log (deflated 65%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/worker_astronomer-combusting-plane-6703.log (deflated 96%)
+  adding: tmp/astro_logs/astronomer-combusting-plane-6703/secrets_astronomer-combusting-plane-6703.log (deflated 85%)
+  adding: tmp/astro_logs/astronomer/ (stored 0%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log (deflated 72%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log (deflated 70%)
+  adding: tmp/astro_logs/astronomer/houston-workerastronomer.log (deflated 90%)
+  adding: tmp/astro_logs/astronomer/nodes.log (deflated 85%)
+  adding: tmp/astro_logs/astronomer/nginx-default-backend_astronomer.log (deflated 97%)
+  adding: tmp/astro_logs/astronomer/alertmanager_astronomer.log (deflated 61%)
+  adding: tmp/astro_logs/astronomer/kube-state_astronomer.log (deflated 55%)
+  adding: tmp/astro_logs/astronomer/secrets_astronomer.log (deflated 85%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log (deflated 72%)
+  adding: tmp/astro_logs/astronomer/nginx_astronomer.log (deflated 94%)
+  adding: tmp/astro_logs/astronomer/svc_astronomer.log (deflated 85%)
+  adding: tmp/astro_logs/astronomer/kibana_astronomer.log (deflated 98%)
+  adding: tmp/astro_logs/astronomer/rs_status_all_namespaces.log (deflated 83%)
+  adding: tmp/astro_logs/astronomer/ingress_astronomer.log (deflated 83%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log (deflated 70%)
+  adding: tmp/astro_logs/astronomer/stan_contatiner_astronomer.log (deflated 88%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log (deflated 71%)
+  adding: tmp/astro_logs/astronomer/cli-install_astronomer.log (deflated 97%)
+  adding: tmp/astro_logs/astronomer/helm_history_astronomer.log (deflated 74%)
+  adding: tmp/astro_logs/astronomer/cronjobs_astronomer.log (deflated 79%)
+  adding: tmp/astro_logs/astronomer/helm_values_astronomer.yaml (deflated 44%)
+  adding: tmp/astro_logs/astronomer/prometheus_container_astronomer.log (deflated 91%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log (deflated 71%)
+  adding: tmp/astro_logs/astronomer/elasticsearch-master_astronomer.log (deflated 87%)
+  adding: tmp/astro_logs/astronomer/helm_status.log (deflated 63%)
+  adding: tmp/astro_logs/astronomer/events_astronomer.log (deflated 76%)
+  adding: tmp/astro_logs/astronomer/kube-system.log (deflated 86%)
+  adding: tmp/astro_logs/astronomer/getall_status_astronomer.log (deflated 90%)
+  adding: tmp/astro_logs/astronomer/elasticsearch-data_astronomer.log (deflated 87%)
+  adding: tmp/astro_logs/astronomer/pvc_astronomer.log (deflated 70%)
+  adding: tmp/astro_logs/astronomer/elasticsearch-clientastronomer.log (deflated 88%)
+  adding: tmp/astro_logs/astronomer/registryastronomer.log (deflated 98%)
+  adding: tmp/astro_logs/astronomer/commanderastronomer.log (deflated 91%)
+  adding: tmp/astro_logs/astronomer/nats_astronomer.log (deflated 73%)
+  adding: tmp/astro_logs/astronomer/houstonastronomer.log (deflated 94%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log (deflated 71%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log (deflated 73%)
+  adding: tmp/astro_logs/astronomer/elasticsearch-nginx_astronomer.log (deflated 98%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log (deflated 71%)
+  adding: tmp/astro_logs/astronomer/astro-uiastronomer.log (deflated 98%)
+  adding: tmp/astro_logs/astronomer/pods_astronomer.log (deflated 88%)
+  adding: tmp/astro_logs/astronomer/Enviornment_Info.log (deflated 62%)
+  adding: tmp/astro_logs/astronomer/grafana_astronomer.log (deflated 93%)
+  adding: tmp/astro_logs/astronomer/DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log (deflated 71%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/ (stored 0%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/pods_astronomer-interstellar-ecliptic-1909.log (deflated 76%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/helm_values_interstellar-ecliptic-1909.yaml (deflated 79%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/pgbouncer _astronomer-interstellar-ecliptic-1909.log (deflated 66%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/events_astronomer-interstellar-ecliptic-1909.log (deflated 91%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/helm_history_interstellar-ecliptic-1909.yaml (deflated 23%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/BADpodDESCRIBE_astronomer-interstellar-ecliptic-1909.log (deflated 66%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/worker_astronomer-interstellar-ecliptic-1909.log (deflated 89%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/rs_status_all_namespaces.log (deflated 68%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/pvc_astronomer-interstellar-ecliptic-1909.log (deflated 42%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/scheduler_astronomer-interstellar-ecliptic-1909.log (deflated 72%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/triggerer astronomer-interstellar-ecliptic-1909.log (deflated 69%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/svc_astronomer-interstellar-ecliptic-1909.log (deflated 67%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/cronjobs_astronomer-interstellar-ecliptic-1909.log (stored 0%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/statsd_astronomer-interstellar-ecliptic-1909.log (deflated 49%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/getall_status_astronomer-interstellar-ecliptic-1909.log (deflated 80%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/ingress_astronomer-interstellar-ecliptic-1909.log (deflated 69%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/secrets_astronomer-interstellar-ecliptic-1909.log (deflated 84%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/flower _astronomer-interstellar-ecliptic-1909.log (deflated 65%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/redis_astronomer-interstellar-ecliptic-1909.log (deflated 51%)
+  adding: tmp/astro_logs/astronomer-interstellar-ecliptic-1909/webserverastronomer-interstellar-ecliptic-1909.log (deflated 94%)
 Here is the list of files created:
-/tmp/n/astronomer:
-total 27M
--rw-r--r-- 1 root root 5.4K Sep 18 14:45 DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.2K Sep 18 14:45 DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.6K Sep 18 14:45 DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.6K Sep 18 14:45 DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.8K Sep 18 14:46 DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.5K Sep 18 14:46 DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.5K Sep 18 14:46 DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 6.3K Sep 18 14:46 DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.2K Sep 18 14:46 DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.8K Sep 18 14:46 DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 6.1M Sep 18 14:46 houstonastronomer.log
--rw-r--r-- 1 root root  15K Sep 18 14:46 houston-workerastronomer.log
--rw-r--r-- 1 root root 3.5M Sep 18 14:46 astro-uiastronomer.log
--rw-r--r-- 1 root root 3.2M Sep 18 14:46 commanderastronomer.log
--rw-r--r-- 1 root root 2.0M Sep 18 14:47 nginx_astronomer.log
--rw-r--r-- 1 root root 1.7K Sep 18 14:47 kube-state_astronomer.log
--rw-r--r-- 1 root root 3.8M Sep 18 14:47 kibana_astronomer.log
--rw-r--r-- 1 root root 1.8M Sep 18 14:47 nginx-default-backend_astronomer.log
--rw-r--r-- 1 root root  79K Sep 18 14:47 grafana_astronomer.log
--rw-r--r-- 1 root root 1.5M Sep 18 14:47 elasticsearch-nginx_astronomer.log
--rw-r--r-- 1 root root 1.7M Sep 18 14:47 cli-install_astronomer.log
--rw-r--r-- 1 root root  43K Sep 18 14:47 elasticsearch-clientastronomer.log
--rw-r--r-- 1 root root  36K Sep 18 14:47 elasticsearch-master_astronomer.log
--rw-r--r-- 1 root root  37K Sep 18 14:48 elasticsearch-data_astronomer.log
--rw-r--r-- 1 root root 160K Sep 18 14:48 stan_contatiner_astronomer.log
--rw-r--r-- 1 root root 3.2M Sep 18 14:48 registryastronomer.log
--rw-r--r-- 1 root root  73K Sep 18 14:48 prometheus_container_astronomer.log
--rw-r--r-- 1 root root 3.0K Sep 18 14:48 nats_astronomer.log
--rw-r--r-- 1 root root 1.4K Sep 18 14:48 alertmanager_astronomer.log
--rw-r--r-- 1 root root  51K Sep 18 14:48 getall_status_astronomer.log
--rw-r--r-- 1 root root 3.8K Sep 18 14:48 rs_status_all_namespaces.log
--rw-r--r-- 1 root root  11K Sep 18 14:48 pods_astronomer.log
--rw-r--r-- 1 root root 3.3K Sep 18 14:48 events_astronomer.log
--rw-r--r-- 1 root root 2.9K Sep 18 14:48 secrets_astronomer.log
--rw-r--r-- 1 root root 2.1K Sep 18 14:48 nodes.log
--rw-r--r-- 1 root root 3.3K Sep 18 14:48 kube-system.log
--rw-r--r-- 1 root root 4.4K Sep 18 14:48 svc_astronomer.log
--rw-r--r-- 1 root root 1.7K Sep 18 14:48 pvc_astronomer.log
--rw-r--r-- 1 root root 1.6K Sep 18 14:48 ingress_astronomer.log
--rw-r--r-- 1 root root 1.7K Sep 18 14:48 cronjobs_astronomer.log
--rw-r--r-- 1 root root 1.4K Sep 18 14:48 Enviornment_Info.log
--rw-r--r-- 1 root root  790 Sep 18 14:48 helm_status.log
--rw-r--r-- 1 root root 1012 Sep 18 14:48 helm_history_astronomer.log
--rw-r--r-- 1 root root  579 Sep 18 14:49 helm_values_astronomer.yaml
+/tmp/astro_logs/astronomer:
+total 40M
+-rw-r--r-- 1 root root 5.2K Sep 19 10:15 DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.5K Sep 19 10:15 DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.6K Sep 19 10:15 DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.6K Sep 19 10:15 DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 6.1K Sep 19 10:15 DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.6K Sep 19 10:15 DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.8K Sep 19 10:15 DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 6.3K Sep 19 10:15 DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.2K Sep 19 10:15 DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.5K Sep 19 10:15 DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 6.6M Sep 19 10:15 houstonastronomer.log
+-rw-r--r-- 1 root root  30K Sep 19 10:15 houston-workerastronomer.log
+-rw-r--r-- 1 root root 4.8M Sep 19 10:15 astro-uiastronomer.log
+-rw-r--r-- 1 root root 4.4M Sep 19 10:15 commanderastronomer.log
+-rw-r--r-- 1 root root 2.5M Sep 19 10:15 nginx_astronomer.log
+-rw-r--r-- 1 root root 1.7K Sep 19 10:16 kube-state_astronomer.log
+-rw-r--r-- 1 root root 5.2M Sep 19 10:16 kibana_astronomer.log
+-rw-r--r-- 1 root root 2.5M Sep 19 10:16 nginx-default-backend_astronomer.log
+-rw-r--r-- 1 root root 109K Sep 19 10:16 grafana_astronomer.log
+-rw-r--r-- 1 root root 6.1M Sep 19 10:16 elasticsearch-nginx_astronomer.log
+-rw-r--r-- 1 root root 2.4M Sep 19 10:16 cli-install_astronomer.log
+-rw-r--r-- 1 root root  43K Sep 19 10:16 elasticsearch-clientastronomer.log
+-rw-r--r-- 1 root root  36K Sep 19 10:16 elasticsearch-master_astronomer.log
+-rw-r--r-- 1 root root  37K Sep 19 10:16 elasticsearch-data_astronomer.log
+-rw-r--r-- 1 root root 165K Sep 19 10:16 stan_contatiner_astronomer.log
+-rw-r--r-- 1 root root 4.4M Sep 19 10:16 registryastronomer.log
+-rw-r--r-- 1 root root  81K Sep 19 10:16 prometheus_container_astronomer.log
+-rw-r--r-- 1 root root 3.0K Sep 19 10:16 nats_astronomer.log
+-rw-r--r-- 1 root root 1.4K Sep 19 10:16 alertmanager_astronomer.log
+-rw-r--r-- 1 root root  52K Sep 19 10:17 getall_status_astronomer.log
+-rw-r--r-- 1 root root 3.9K Sep 19 10:17 rs_status_all_namespaces.log
+-rw-r--r-- 1 root root  12K Sep 19 10:17 pods_astronomer.log
+-rw-r--r-- 1 root root 1.9K Sep 19 10:17 events_astronomer.log
+-rw-r--r-- 1 root root 2.9K Sep 19 10:17 secrets_astronomer.log
+-rw-r--r-- 1 root root 2.1K Sep 19 10:17 nodes.log
+-rw-r--r-- 1 root root 3.3K Sep 19 10:17 kube-system.log
+-rw-r--r-- 1 root root 4.4K Sep 19 10:17 svc_astronomer.log
+-rw-r--r-- 1 root root 1.7K Sep 19 10:17 pvc_astronomer.log
+-rw-r--r-- 1 root root 1.6K Sep 19 10:17 ingress_astronomer.log
+-rw-r--r-- 1 root root 1.7K Sep 19 10:17 cronjobs_astronomer.log
+-rw-r--r-- 1 root root 1.4K Sep 19 10:17 Enviornment_Info.log
+-rw-r--r-- 1 root root  830 Sep 19 10:17 helm_status.log
+-rw-r--r-- 1 root root 1012 Sep 19 10:17 helm_history_astronomer.log
+-rw-r--r-- 1 root root  579 Sep 19 10:17 helm_values_astronomer.yaml
 
-/tmp/n/astronomer-combusting-plane-6703:
-total 7.8M
--rw-r--r-- 1 root root 6.6K Sep 18 14:49  getall_status_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  610 Sep 18 14:49  rs_status_all_namespaces.log
--rw-r--r-- 1 root root 1.9K Sep 18 14:49  pods_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 5.8K Sep 18 14:49  events_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 3.3K Sep 18 14:49  secrets_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  707 Sep 18 14:49  svc_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  276 Sep 18 14:49  pvc_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  684 Sep 18 14:49  ingress_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  280 Sep 18 14:49  cronjobs_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 1.5M Sep 18 14:49  scheduler_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  24K Sep 18 14:49  worker_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 4.3M Sep 18 14:49  webserverastronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 6.9K Sep 18 14:49 'triggerer astronomer-combusting-plane-6703.log'
--rw-r--r-- 1 root root 1.8M Sep 18 14:49 'pgbouncer _astronomer-combusting-plane-6703.log'
--rw-r--r-- 1 root root 2.1K Sep 18 14:49 'flower _astronomer-combusting-plane-6703.log'
--rw-r--r-- 1 root root  568 Sep 18 14:49  statsd_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 188K Sep 18 14:49  redis_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  528 Sep 18 14:50  helm_history_combusting-plane-6703.yaml
--rw-r--r-- 1 root root  47K Sep 18 14:50  helm_values_combusting-plane-6703.yaml
+/tmp/astro_logs/astronomer-combusting-plane-6703:
+total 12M
+-rw-r--r-- 1 root root 6.6K Sep 19 10:17  getall_status_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  610 Sep 19 10:17  rs_status_all_namespaces.log
+-rw-r--r-- 1 root root 1.9K Sep 19 10:17  pods_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 6.1K Sep 19 10:17  events_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 3.3K Sep 19 10:17  secrets_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  707 Sep 19 10:17  svc_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  276 Sep 19 10:17  pvc_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  684 Sep 19 10:17  ingress_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  280 Sep 19 10:18  cronjobs_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 2.3M Sep 19 10:18  scheduler_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 2.4M Sep 19 10:18  worker_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 4.6M Sep 19 10:18  webserverastronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 7.3K Sep 19 10:18 'triggerer astronomer-combusting-plane-6703.log'
+-rw-r--r-- 1 root root 1.9M Sep 19 10:18 'pgbouncer _astronomer-combusting-plane-6703.log'
+-rw-r--r-- 1 root root 2.1K Sep 19 10:18 'flower _astronomer-combusting-plane-6703.log'
+-rw-r--r-- 1 root root  568 Sep 19 10:18  statsd_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 202K Sep 19 10:18  redis_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  528 Sep 19 10:18  helm_history_combusting-plane-6703.yaml
+-rw-r--r-- 1 root root  47K Sep 19 10:18  helm_values_combusting-plane-6703.yaml
 
-/tmp/n/astronomer-flickering-rocket-1376:
-total 4.4M
--rw-r--r-- 1 root root  11K Sep 18 14:45  BADpodDESCRIBE_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 4.1K Sep 18 14:50  getall_status_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  624 Sep 18 14:50  rs_status_all_namespaces.log
--rw-r--r-- 1 root root 2.1K Sep 18 14:50  pods_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 6.0K Sep 18 14:50  events_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 2.7K Sep 18 14:50  secrets_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  714 Sep 18 14:50  svc_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  278 Sep 18 14:50  pvc_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  690 Sep 18 14:50  ingress_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root    0 Sep 18 14:50  scheduler_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  284 Sep 18 14:50  cronjobs_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  99K Sep 18 14:50  worker_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 4.1M Sep 18 14:50  webserverastronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 2.4K Sep 18 14:50 'triggerer astronomer-flickering-rocket-1376.log'
--rw-r--r-- 1 root root 101K Sep 18 14:50 'pgbouncer _astronomer-flickering-rocket-1376.log'
--rw-r--r-- 1 root root 2.1K Sep 18 14:50 'flower _astronomer-flickering-rocket-1376.log'
--rw-r--r-- 1 root root  568 Sep 18 14:51  statsd_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 4.9K Sep 18 14:51  redis_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  172 Sep 18 14:51  helm_history_flickering-rocket-1376.yaml
--rw-r--r-- 1 root root  19K Sep 18 14:51  helm_values_flickering-rocket-1376.yaml
-/tmp/n/astronomer:
-total 27M
--rw-r--r-- 1 root root 5.4K Sep 18 14:45 DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.2K Sep 18 14:45 DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.6K Sep 18 14:45 DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.6K Sep 18 14:45 DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.8K Sep 18 14:46 DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.5K Sep 18 14:46 DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.5K Sep 18 14:46 DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 6.3K Sep 18 14:46 DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.2K Sep 18 14:46 DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 5.8K Sep 18 14:46 DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log
--rw-r--r-- 1 root root 6.1M Sep 18 14:46 houstonastronomer.log
--rw-r--r-- 1 root root  15K Sep 18 14:46 houston-workerastronomer.log
--rw-r--r-- 1 root root 3.5M Sep 18 14:46 astro-uiastronomer.log
--rw-r--r-- 1 root root 3.2M Sep 18 14:46 commanderastronomer.log
--rw-r--r-- 1 root root 2.0M Sep 18 14:47 nginx_astronomer.log
--rw-r--r-- 1 root root 1.7K Sep 18 14:47 kube-state_astronomer.log
--rw-r--r-- 1 root root 3.8M Sep 18 14:47 kibana_astronomer.log
--rw-r--r-- 1 root root 1.8M Sep 18 14:47 nginx-default-backend_astronomer.log
--rw-r--r-- 1 root root  79K Sep 18 14:47 grafana_astronomer.log
--rw-r--r-- 1 root root 1.5M Sep 18 14:47 elasticsearch-nginx_astronomer.log
--rw-r--r-- 1 root root 1.7M Sep 18 14:47 cli-install_astronomer.log
--rw-r--r-- 1 root root  43K Sep 18 14:47 elasticsearch-clientastronomer.log
--rw-r--r-- 1 root root  36K Sep 18 14:47 elasticsearch-master_astronomer.log
--rw-r--r-- 1 root root  37K Sep 18 14:48 elasticsearch-data_astronomer.log
--rw-r--r-- 1 root root 160K Sep 18 14:48 stan_contatiner_astronomer.log
--rw-r--r-- 1 root root 3.2M Sep 18 14:48 registryastronomer.log
--rw-r--r-- 1 root root  73K Sep 18 14:48 prometheus_container_astronomer.log
--rw-r--r-- 1 root root 3.0K Sep 18 14:48 nats_astronomer.log
--rw-r--r-- 1 root root 1.4K Sep 18 14:48 alertmanager_astronomer.log
--rw-r--r-- 1 root root  51K Sep 18 14:48 getall_status_astronomer.log
--rw-r--r-- 1 root root 3.8K Sep 18 14:48 rs_status_all_namespaces.log
--rw-r--r-- 1 root root  11K Sep 18 14:48 pods_astronomer.log
--rw-r--r-- 1 root root 3.3K Sep 18 14:48 events_astronomer.log
--rw-r--r-- 1 root root 2.9K Sep 18 14:48 secrets_astronomer.log
--rw-r--r-- 1 root root 2.1K Sep 18 14:48 nodes.log
--rw-r--r-- 1 root root 3.3K Sep 18 14:48 kube-system.log
--rw-r--r-- 1 root root 4.4K Sep 18 14:48 svc_astronomer.log
--rw-r--r-- 1 root root 1.7K Sep 18 14:48 pvc_astronomer.log
--rw-r--r-- 1 root root 1.6K Sep 18 14:48 ingress_astronomer.log
--rw-r--r-- 1 root root 1.7K Sep 18 14:48 cronjobs_astronomer.log
--rw-r--r-- 1 root root 1.4K Sep 18 14:48 Enviornment_Info.log
--rw-r--r-- 1 root root  790 Sep 18 14:48 helm_status.log
--rw-r--r-- 1 root root 1012 Sep 18 14:48 helm_history_astronomer.log
--rw-r--r-- 1 root root  579 Sep 18 14:49 helm_values_astronomer.yaml
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909:
+total 224K
+-rw-r--r-- 1 root root 6.3K Sep 19 10:14  BADpodDESCRIBE_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 3.8K Sep 19 10:18  getall_status_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  670 Sep 19 10:18  rs_status_all_namespaces.log
+-rw-r--r-- 1 root root 1.9K Sep 19 10:18  pods_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  21K Sep 19 10:18  events_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 2.8K Sep 19 10:18  secrets_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  747 Sep 19 10:18  svc_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  288 Sep 19 10:18  pvc_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  718 Sep 19 10:18  ingress_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root    0 Sep 19 10:18  cronjobs_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 6.2K Sep 19 10:19  scheduler_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  42K Sep 19 10:19  worker_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  66K Sep 19 10:19  webserverastronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 2.0K Sep 19 10:19 'triggerer astronomer-interstellar-ecliptic-1909.log'
+-rw-r--r-- 1 root root 1.6K Sep 19 10:19 'pgbouncer _astronomer-interstellar-ecliptic-1909.log'
+-rw-r--r-- 1 root root 2.2K Sep 19 10:19 'flower _astronomer-interstellar-ecliptic-1909.log'
+-rw-r--r-- 1 root root  568 Sep 19 10:19  statsd_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  639 Sep 19 10:19  redis_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  172 Sep 19 10:19  helm_history_interstellar-ecliptic-1909.yaml
+-rw-r--r-- 1 root root  19K Sep 19 10:19  helm_values_interstellar-ecliptic-1909.yaml
+/tmp/astro_logs/astronomer:
+total 40M
+-rw-r--r-- 1 root root 5.2K Sep 19 10:15 DESCRIBE_ip-10-234-1-104.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.5K Sep 19 10:15 DESCRIBE_ip-10-234-1-159.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.6K Sep 19 10:15 DESCRIBE_ip-10-234-1-239.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.6K Sep 19 10:15 DESCRIBE_ip-10-234-1-242.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 6.1K Sep 19 10:15 DESCRIBE_ip-10-234-1-246.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.6K Sep 19 10:15 DESCRIBE_ip-10-234-2-100.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.8K Sep 19 10:15 DESCRIBE_ip-10-234-2-153.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 6.3K Sep 19 10:15 DESCRIBE_ip-10-234-2-22.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.2K Sep 19 10:15 DESCRIBE_ip-10-234-2-242.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 5.5K Sep 19 10:15 DESCRIBE_ip-10-234-2-44.us-east-2.compute.internal.log
+-rw-r--r-- 1 root root 6.6M Sep 19 10:15 houstonastronomer.log
+-rw-r--r-- 1 root root  30K Sep 19 10:15 houston-workerastronomer.log
+-rw-r--r-- 1 root root 4.8M Sep 19 10:15 astro-uiastronomer.log
+-rw-r--r-- 1 root root 4.4M Sep 19 10:15 commanderastronomer.log
+-rw-r--r-- 1 root root 2.5M Sep 19 10:15 nginx_astronomer.log
+-rw-r--r-- 1 root root 1.7K Sep 19 10:16 kube-state_astronomer.log
+-rw-r--r-- 1 root root 5.2M Sep 19 10:16 kibana_astronomer.log
+-rw-r--r-- 1 root root 2.5M Sep 19 10:16 nginx-default-backend_astronomer.log
+-rw-r--r-- 1 root root 109K Sep 19 10:16 grafana_astronomer.log
+-rw-r--r-- 1 root root 6.1M Sep 19 10:16 elasticsearch-nginx_astronomer.log
+-rw-r--r-- 1 root root 2.4M Sep 19 10:16 cli-install_astronomer.log
+-rw-r--r-- 1 root root  43K Sep 19 10:16 elasticsearch-clientastronomer.log
+-rw-r--r-- 1 root root  36K Sep 19 10:16 elasticsearch-master_astronomer.log
+-rw-r--r-- 1 root root  37K Sep 19 10:16 elasticsearch-data_astronomer.log
+-rw-r--r-- 1 root root 165K Sep 19 10:16 stan_contatiner_astronomer.log
+-rw-r--r-- 1 root root 4.4M Sep 19 10:16 registryastronomer.log
+-rw-r--r-- 1 root root  81K Sep 19 10:16 prometheus_container_astronomer.log
+-rw-r--r-- 1 root root 3.0K Sep 19 10:16 nats_astronomer.log
+-rw-r--r-- 1 root root 1.4K Sep 19 10:16 alertmanager_astronomer.log
+-rw-r--r-- 1 root root  52K Sep 19 10:17 getall_status_astronomer.log
+-rw-r--r-- 1 root root 3.9K Sep 19 10:17 rs_status_all_namespaces.log
+-rw-r--r-- 1 root root  12K Sep 19 10:17 pods_astronomer.log
+-rw-r--r-- 1 root root 1.9K Sep 19 10:17 events_astronomer.log
+-rw-r--r-- 1 root root 2.9K Sep 19 10:17 secrets_astronomer.log
+-rw-r--r-- 1 root root 2.1K Sep 19 10:17 nodes.log
+-rw-r--r-- 1 root root 3.3K Sep 19 10:17 kube-system.log
+-rw-r--r-- 1 root root 4.4K Sep 19 10:17 svc_astronomer.log
+-rw-r--r-- 1 root root 1.7K Sep 19 10:17 pvc_astronomer.log
+-rw-r--r-- 1 root root 1.6K Sep 19 10:17 ingress_astronomer.log
+-rw-r--r-- 1 root root 1.7K Sep 19 10:17 cronjobs_astronomer.log
+-rw-r--r-- 1 root root 1.4K Sep 19 10:17 Enviornment_Info.log
+-rw-r--r-- 1 root root  830 Sep 19 10:17 helm_status.log
+-rw-r--r-- 1 root root 1012 Sep 19 10:17 helm_history_astronomer.log
+-rw-r--r-- 1 root root  579 Sep 19 10:17 helm_values_astronomer.yaml
 
-/tmp/n/astronomer-combusting-plane-6703:
-total 7.8M
--rw-r--r-- 1 root root 6.6K Sep 18 14:49  getall_status_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  610 Sep 18 14:49  rs_status_all_namespaces.log
--rw-r--r-- 1 root root 1.9K Sep 18 14:49  pods_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 5.8K Sep 18 14:49  events_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 3.3K Sep 18 14:49  secrets_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  707 Sep 18 14:49  svc_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  276 Sep 18 14:49  pvc_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  684 Sep 18 14:49  ingress_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  280 Sep 18 14:49  cronjobs_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 1.5M Sep 18 14:49  scheduler_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  24K Sep 18 14:49  worker_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 4.3M Sep 18 14:49  webserverastronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 6.9K Sep 18 14:49 'triggerer astronomer-combusting-plane-6703.log'
--rw-r--r-- 1 root root 1.8M Sep 18 14:49 'pgbouncer _astronomer-combusting-plane-6703.log'
--rw-r--r-- 1 root root 2.1K Sep 18 14:49 'flower _astronomer-combusting-plane-6703.log'
--rw-r--r-- 1 root root  568 Sep 18 14:49  statsd_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root 188K Sep 18 14:49  redis_astronomer-combusting-plane-6703.log
--rw-r--r-- 1 root root  528 Sep 18 14:50  helm_history_combusting-plane-6703.yaml
--rw-r--r-- 1 root root  47K Sep 18 14:50  helm_values_combusting-plane-6703.yaml
+/tmp/astro_logs/astronomer-combusting-plane-6703:
+total 12M
+-rw-r--r-- 1 root root 6.6K Sep 19 10:17  getall_status_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  610 Sep 19 10:17  rs_status_all_namespaces.log
+-rw-r--r-- 1 root root 1.9K Sep 19 10:17  pods_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 6.1K Sep 19 10:17  events_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 3.3K Sep 19 10:17  secrets_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  707 Sep 19 10:17  svc_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  276 Sep 19 10:17  pvc_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  684 Sep 19 10:17  ingress_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  280 Sep 19 10:18  cronjobs_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 2.3M Sep 19 10:18  scheduler_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 2.4M Sep 19 10:18  worker_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 4.6M Sep 19 10:18  webserverastronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 7.3K Sep 19 10:18 'triggerer astronomer-combusting-plane-6703.log'
+-rw-r--r-- 1 root root 1.9M Sep 19 10:18 'pgbouncer _astronomer-combusting-plane-6703.log'
+-rw-r--r-- 1 root root 2.1K Sep 19 10:18 'flower _astronomer-combusting-plane-6703.log'
+-rw-r--r-- 1 root root  568 Sep 19 10:18  statsd_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root 202K Sep 19 10:18  redis_astronomer-combusting-plane-6703.log
+-rw-r--r-- 1 root root  528 Sep 19 10:18  helm_history_combusting-plane-6703.yaml
+-rw-r--r-- 1 root root  47K Sep 19 10:18  helm_values_combusting-plane-6703.yaml
 
-/tmp/n/astronomer-flickering-rocket-1376:
-total 4.4M
--rw-r--r-- 1 root root  11K Sep 18 14:45  BADpodDESCRIBE_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 4.1K Sep 18 14:50  getall_status_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  624 Sep 18 14:50  rs_status_all_namespaces.log
--rw-r--r-- 1 root root 2.1K Sep 18 14:50  pods_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 6.0K Sep 18 14:50  events_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 2.7K Sep 18 14:50  secrets_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  714 Sep 18 14:50  svc_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  278 Sep 18 14:50  pvc_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  690 Sep 18 14:50  ingress_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root    0 Sep 18 14:50  scheduler_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  284 Sep 18 14:50  cronjobs_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  99K Sep 18 14:50  worker_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 4.1M Sep 18 14:50  webserverastronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 2.4K Sep 18 14:50 'triggerer astronomer-flickering-rocket-1376.log'
--rw-r--r-- 1 root root 101K Sep 18 14:50 'pgbouncer _astronomer-flickering-rocket-1376.log'
--rw-r--r-- 1 root root 2.1K Sep 18 14:50 'flower _astronomer-flickering-rocket-1376.log'
--rw-r--r-- 1 root root  568 Sep 18 14:51  statsd_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root 4.9K Sep 18 14:51  redis_astronomer-flickering-rocket-1376.log
--rw-r--r-- 1 root root  172 Sep 18 14:51  helm_history_flickering-rocket-1376.yaml
--rw-r--r-- 1 root root  19K Sep 18 14:51  helm_values_flickering-rocket-1376.yaml
+/tmp/astro_logs/astronomer-interstellar-ecliptic-1909:
+total 224K
+-rw-r--r-- 1 root root 6.3K Sep 19 10:14  BADpodDESCRIBE_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 3.8K Sep 19 10:18  getall_status_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  670 Sep 19 10:18  rs_status_all_namespaces.log
+-rw-r--r-- 1 root root 1.9K Sep 19 10:18  pods_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  21K Sep 19 10:18  events_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 2.8K Sep 19 10:18  secrets_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  747 Sep 19 10:18  svc_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  288 Sep 19 10:18  pvc_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  718 Sep 19 10:18  ingress_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root    0 Sep 19 10:18  cronjobs_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 6.2K Sep 19 10:19  scheduler_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  42K Sep 19 10:19  worker_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  66K Sep 19 10:19  webserverastronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root 2.0K Sep 19 10:19 'triggerer astronomer-interstellar-ecliptic-1909.log'
+-rw-r--r-- 1 root root 1.6K Sep 19 10:19 'pgbouncer _astronomer-interstellar-ecliptic-1909.log'
+-rw-r--r-- 1 root root 2.2K Sep 19 10:19 'flower _astronomer-interstellar-ecliptic-1909.log'
+-rw-r--r-- 1 root root  568 Sep 19 10:19  statsd_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  639 Sep 19 10:19  redis_astronomer-interstellar-ecliptic-1909.log
+-rw-r--r-- 1 root root  172 Sep 19 10:19  helm_history_interstellar-ecliptic-1909.yaml
+-rw-r--r-- 1 root root  19K Sep 19 10:19  helm_values_interstellar-ecliptic-1909.yaml
+total 4.6M
+drwxrwxrwx 5 root root 4.0K Sep 19 10:14 astro_logs
+-rw-r--r-- 1 root root 2.3M Sep 19 10:19 astro_logs_2022-09-19.tar.gz
+-rw-r--r-- 1 root root 2.3M Sep 19 10:19 astro_logs_2022-09-19.zip
 Please attach the zip file or .gz file created in /tmp to the zendesk ticket for reference.
 ~~~

@@ -133,9 +133,9 @@ tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
 zip -r "$DIR"_$(date +%F).zip "$DIR"
 cdir=$PWD
 echo "Here is the list of files created:"
-ls -lhtr *
 ls -lhtr $DIR/*
 ls -lhtr /tmp/astro_logs/$ASTRONOMER_NAMESPACE*
+ls -lhtr
 echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
 #echo "Timing out for 30 sec for zip file to be present before sending"
 #@timeout /t 30
