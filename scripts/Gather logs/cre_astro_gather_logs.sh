@@ -42,7 +42,7 @@ echo "======================Gathering Describe output of Bad state pod==========
 for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
 do
   for POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
-    echo $POD pod is in bad state;echo "Collecting Describe output of bad state pods in $NS Namespace ";kubectl describe pod $POD  > "$NS/BADpodDESCRIBE_$POD_$NS.log" -n $NS   
+    export POD=$POD;echo $POD pod is in bad state;echo "Collecting Describe output of bad state pod $POD in $NS Namespace ";kubectl describe pod $POD  > "$NS/$POD-BAD_$NS.log" -n $NS   
     done
 done
 #####====================================================================================================================================================#####
@@ -144,3 +144,5 @@ echo "Please attach the zip file or .gz file created in $cdir to the zendesk tic
 #echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -a $DIR"_$(date +%F).tar.gz -s "Platform logs for troubleshooting $Ticket" -- $mail
 #####====================================================================================================================================================#####
 #echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -s "Platform logs for troubleshooting $Ticket" -- $mail
+
+
