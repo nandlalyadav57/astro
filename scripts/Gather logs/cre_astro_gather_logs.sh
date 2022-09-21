@@ -141,6 +141,7 @@ echo "Checking ENDPOINTS"
 
 for EP in $(kubectl describe svc kube-dns -n kube-system|grep Endpoints|awk '{print $2}'|uniq|sed 's/,/\n/g'|sed 's/:[^[:blank:]]*//'); do
 echo "======================CHECKING Houston ENDPOINT for $EP======================";nslookup houston.$BASEDOMAIN >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log; echo " you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod" >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log
+echo " PLEASE NOTE ========>>>> you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod to make sure endpoints are running fine"
 done
 
 for i in {1..10} ;do curl -I  https://registry.$BASEDOMAIN; done  > $DIR/curl_check_registry.$BASEDOMAIN.log
