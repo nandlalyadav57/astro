@@ -28,7 +28,8 @@ chmod 755 *.sh
 
 Expected output:
 
-![image](https://user-images.githubusercontent.com/33649510/190946921-85a8fe80-785c-49c2-9199-26578b3294f9.png)
+![image](https://user-images.githubusercontent.com/33649510/191579495-68d37f5c-74f9-4372-a2df-2be9e8768ba9.png)
+
 
 ![image](https://user-images.githubusercontent.com/33649510/190877503-5ada590a-75cf-41bd-93e0-7b6d59bb7f2c.png)
 
