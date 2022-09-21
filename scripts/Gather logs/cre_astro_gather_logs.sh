@@ -145,7 +145,7 @@ done
 
 for i in {1..10} ;do curl -I  https://registry.$BASEDOMAIN; done  > $DIR/curl_check_registry.$BASEDOMAIN.log
 for i in {1..10} ;do curl -I  https://app.$BASEDOMAIN/; done      > $DIR/curl_check_app.$BASEDOMAIN.log
-for i in {1..10} ;do curl -I  https://install.$BASEDOMAIN/; done  > $DIR/curl_check_install.$BASEDOMAIN/.log
+for i in {1..10} ;do curl -I  https://install.$BASEDOMAIN/; done  > $DIR/curl_check_install.$BASEDOMAIN.log
 
 #for i in {1..10} ;do curl -I  https://kibana.$BASEDOMAIN/; done
 #for i in {1..10} ;do curl -I  https://grafana.$BASEDOMAIN/; done
