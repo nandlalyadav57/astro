@@ -7,8 +7,9 @@ timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 echo "Enter your Astronomer Namespace Name:"
 read ASTRONOMER_NAMESPACE
 echo "Enter the path of directory where you want to keep your log files exported:"
-read DIR
-echo "If had a test cluster with the URL ```https://app.xyz.astro-cre.com`then my base domain is ```xyz.astro-cre.com`"
+read DI
+export DIR=$DI/\astro_logs
+#echo "If had a test cluster with the URL ```https://app.xyz.astro-cre.com`then my base domain is ```xyz.astro-cre.com`"
 echo "what is your basedomain:"
 read BASEDOMAIN
 
@@ -139,7 +140,7 @@ echo "======================Gathering All the Deployment namespace logs in the $
 echo "Checking ENDPOINTS"
 
 for EP in $(kubectl describe svc kube-dns -n kube-system|grep Endpoints|awk '{print $2}'|uniq|sed 's/,/\n/g'|sed 's/:[^[:blank:]]*//'); do
-echo "======================CHECKING Houston ENDPOINT======================";nslookup houston.$BASEDOMAIN $EP >> $DIR/nslookup_houston.$BASEDOMAIN.log
+echo "======================CHECKING Houston ENDPOINT for $EP======================";nslookup houston.$BASEDOMAIN >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log; echo " you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod" >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log
 done
 
 for i in {1..10} ;do curl -I  https://registry.$BASEDOMAIN; done  > $DIR/curl_check_registry.$BASEDOMAIN.log
