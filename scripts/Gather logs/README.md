@@ -6,14 +6,19 @@ It will export pod logs,events,helm values,node status,secrets,rs,ingres,jobs et
 Also, it will include describe output of all the nodes & the status of pods that are in a bad state.
 
 
-We have to make sure to add below paramters in script.
+We have to make sure to add below paramters in script.The script is interactive and would ask the same
 
-Astronomer namespace (Astronomer Namespace to collect logs)
-DIR (local directory to export the logs)
+1.) Astronomer namespace (Astronomer Namespace to collect logs)
 
+
+2.) DIR (local directory to export the logs)
+
+
+3.) BASEDOMAIN (I had a test cluster with the URL ```https://app.nandlal51.astro-cre.com``` then my base domain is ```nandlal51.astro-cre.com```
 ~~~
-ASTRONOMER_NAMESPACE=
+export ASTRONOMER_NAMESPACE=
 export DIR=
+export BASEDOMAIN=
 ~~~
 
 Usage: Just run the shell script as below and you will get required log files.
