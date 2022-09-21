@@ -1,7 +1,18 @@
 #!/bin/bash
 timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 # Put the name of the astronomer ASTRONOMER_NAMESPACE below
-export ASTRONOMER_NAMESPACE=astronomer
+#export ASTRONOMER_NAMESPACE=astronomer
+#export DIR="/tmp"
+#export BASEDOMAIN=nandlal51.astro-cre.com 
+echo "Enter your Astronomer Namespace Name:"
+read ASTRONOMER_NAMESPACE
+echo "Enter the path of directory where you want to keep your log files exported:"
+read DIR
+echo "If had a test cluster with the URL ```https://app.xyz.astro-cre.com`then my base domain is ```xyz.astro-cre.com`"
+echo "what is your basedomain:"
+read BASEDOMAIN
+
+
 #Get Astronomer Release name
 export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "$ASTRONOMER_NAMESPACE"|head -n1 | awk '{ print $1}')
 # Put the name of the deployment ASTRONOMER_NAMESPACE 1 where we are having issues
@@ -9,11 +20,10 @@ export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "$ASTRONOMER_NAMESPACE"|head -n1 
 # removing astronomer- and putting as release name
 #export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
 #setting log directory
-export DIR="/tmp/astro_logs"
 #export Ticket=12149
 #export mail="nandlalyadav57@yahoo.in"
 #Kinfly set base domain info for your cluster 
-##For e.g. I had a test cluster with the URL ```https://app.nandlal54.astro-cre.com`then my base domain is ```nandlal54.astro-cre.com``` ###
+##For e.g. I had a test cluster with the URL ```https://app.nandlal51.astro-cre.com`then my base domain is ```nandlal51.astro-cre.com``` ###
 #export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
 #astro auth login $BASEDOMAIN
 #####====================================================================================================================================================#####
@@ -24,6 +34,7 @@ echo "====> Your astronomer release name is $ASTRONOMER_RELEASE."
 #echo $DEPLOYMENT_NS1
 #echo $Release1
 echo "====> The path where logs would be stored is $DIR."
+echo "====> Your Base Domain is $BASEDOMAIN.This means you should access your Astronomer UI at https://app.$BASEDOMAIN"
 #echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
 #echo "Mail would be sent to $mail using mutt & sendmail package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
 #####====================================================================================================================================================#####
@@ -124,17 +135,36 @@ echo "======================Gathering All the Deployment namespace logs in the $
       echo "Gathering helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/helm_history_$Release_Name.yaml"
       echo "Gathering helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
     done
+
+echo "Checking ENDPOINTS"
+
+for EP in $(kubectl describe svc kube-dns -n kube-system|grep Endpoints|awk '{print $2}'|uniq|sed 's/,/\n/g'|sed 's/:[^[:blank:]]*//'); do
+echo "======================CHECKING Houston ENDPOINT======================";nslookup houston.$BASEDOMAIN $EP >> $DIR/nslookup_houston.$BASEDOMAIN.log
+done
+
+for i in {1..10} ;do curl -I  https://registry.$BASEDOMAIN; done  > $DIR/curl_check_registry.$BASEDOMAIN.log
+for i in {1..10} ;do curl -I  https://app.$BASEDOMAIN/; done      > $DIR/curl_check_app.$BASEDOMAIN.log
+for i in {1..10} ;do curl -I  https://install.$BASEDOMAIN/; done  > $DIR/curl_check_install.$BASEDOMAIN/.log
+
+#for i in {1..10} ;do curl -I  https://kibana.$BASEDOMAIN/; done
+#for i in {1..10} ;do curl -I  https://grafana.$BASEDOMAIN/; done
+#for i in {1..10} ;do curl -I  https://houston.$BASEDOMAIN/; done
+#for i in {1..10} ;do curl -I  https://deployments.$BASEDOMAIN; done
+#for i in {1..10} ;do curl -I  https://prometheus.$BASEDOMAIN; done
+#for i in {1..10} ;do curl -I  https://alertmanager.$BASEDOMAIN; done
+
+
 #####====================================================================================================================================================#####
 echo "======================creating GZ and zip files======================"
 #####====================================================================================================================================================#####
 cd "$DIR"
 cd ..
-tar -czvf "$DIR"_$(date +%F).tar.gz "$DIR"
-zip -r "$DIR"_$(date +%F).zip "$DIR"
+tar -czvf "$DIR/astro_logs"_$(date +%F).tar.gz "$DIR"
+zip -r "$DIR/astro_logs"_$(date +%F).zip "$DIR"
 cdir=$PWD
 echo "Here is the list of files created:"
 ls -lhtr $DIR/*
-ls -lhtr /tmp/astro_logs/$ASTRONOMER_NAMESPACE*
+ls -lhtr $DIR/$ASTRONOMER_NAMESPACE*
 ls -lhtr
 echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
 #echo "Timing out for 30 sec for zip file to be present before sending"
