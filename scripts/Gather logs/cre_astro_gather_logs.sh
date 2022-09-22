@@ -80,9 +80,10 @@ echo "======================Gathering logs of All the pods =====================
 for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
 do
   for POD in $(kubectl get pods --no-headers -n $NS |awk '{ print $1}') ; do
-    export POD=$POD;echo "Collecting log of the pod $POD in $NS namespace";export container_name=$(kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);
-    echo Collecting log of the container $container_name in pod $POD in the $NS namespace;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name_$NS.log"  
+    export POD=$POD;echo "Starting to Collect log of the pod $POD in $NS namespace";for container_name in $(kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
+    echo Collecting log of the container $container_name in pod $POD in the $NS namespace now;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name-container_$NS.log"  
     done
+done
 done
 
 
