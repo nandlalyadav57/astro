@@ -9,7 +9,7 @@ read ASTRONOMER_NAMESPACE
 echo "Enter the path of directory where you want to keep your log files exported:"
 read DI
 export DIR=$DI/\astro_logs
-#echo "If had a test cluster with the URL ```https://app.xyz.astro-cre.com`then my base domain is ```xyz.astro-cre.com`"
+echo "If had a test cluster with the URL https://app.xyz.astro-cre.com then my base domain is xyz.astro-cre.com"
 echo "what is your basedomain:"
 read BASEDOMAIN
 
