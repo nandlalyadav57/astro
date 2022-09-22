@@ -42,7 +42,7 @@ Expected output:
 
 ![image](https://user-images.githubusercontent.com/33649510/190877494-200d7b26-2e78-439b-8e35-8c419aad3858.png)
 
-![image](https://user-images.githubusercontent.com/33649510/190877458-1bb63236-141f-4f15-86e6-47a99023fc28.png)
+![image](https://user-images.githubusercontent.com/33649510/191654823-4251832c-6f6b-4589-adfb-5a77baa6f3fb.png)
 
 
 
