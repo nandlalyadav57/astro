@@ -27,6 +27,7 @@ export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "$ASTRONOMER_NAMESPACE"|head -n1 
 ##For e.g. I had a test cluster with the URL ```https://app.nandlal51.astro-cre.com`then my base domain is ```nandlal51.astro-cre.com``` ###
 #export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
 #astro auth login $BASEDOMAIN
+#export Release_Name=$(echo $NS| cut -c 12-)
 #####====================================================================================================================================================#####
 echo "====> Here is the list of Namespaces found:"
 kubectl get namespaces
@@ -39,25 +40,54 @@ echo "====> Your Base Domain is $BASEDOMAIN.This means you should access your As
 #echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
 #echo "Mail would be sent to $mail using mutt & sendmail package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
 #####====================================================================================================================================================#####
+echo "====> cleaning any older $DIR directory to avoid script failure"
+rm -rf $DI/\astro_logs
 echo "====> Creating log file directory $DIR."
 mkdir -p "$DIR"
 chmod -R 777 "$DIR"
 ###https://stackoverflow.com/questions/589149/bash-script-to-cd-to-directory-with-spaces-in-pathname
 cd "$DIR"
 ####creating namespace Directories###
-for NS in $(kubectl get ns --no-headers|grep $ASTRONOMER_NAMESPACE| awk '{print $1}'); do
-    echo "creating namespace $NS Directory ";mkdir $NS 
+for NS in $(kubectl get ns --no-headers| awk '{print $1}'); do
+    echo "creating namespace $NS Directory ";mkdir $NS ;mkdir $NS/AllPodlogs
     done
 #####====================================================================================================================================================#####
 ####Gathering Describe output of bad state pods in all namespaces###
+
+
+#kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort
+#####====================================================================================================================================================#####
+#kubectl get pods astronomer-prometheus-0 -o jsonpath='{.spec.containers[*].name}' -n astronomer|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort
+#get containers name in 1 line from a pod
+#echo "======================Gathering Describe output of Bad state pod======================"
+#for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
+#do
+#  for POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
+#    export POD=$POD;echo $POD pod is in bad state;echo "Collecting Describe output of bad state pod $POD in $NS Namespace ";kubectl describe pod $POD  > "$NS/$POD-BAD_$NS.log" -n $NS   
+#    done
+#done
+
+
 echo "======================Gathering Describe output of Bad state pod======================"
 for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
 do
-  for POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
-    export POD=$POD;echo $POD pod is in bad state;echo "Collecting Describe output of bad state pod $POD in $NS Namespace ";kubectl describe pod $POD  > "$NS/$POD-BAD_$NS.log" -n $NS   
+  for BAD_POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
+    export BAD_POD=$BAD_POD;echo $BAD_POD pod is in bad state;echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace ";kubectl describe pod $BAD_POD  > "$NS/$BAD_POD-BAD_$NS.log" -n $NS   
     done
 done
-#####====================================================================================================================================================#####
+
+echo "======================Gathering logs of All the pods ======================"
+for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
+do
+  for POD in $(kubectl get pods --no-headers -n $NS |awk '{ print $1}') ; do
+    export POD=$POD;echo "Collecting log of the pod $POD in $NS namespace";export container_name=$(kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);
+    echo Collecting log of the container $container_name in pod $POD in the $NS namespace;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name_$NS.log"  
+    done
+done
+
+
+
+
 #####====================================================================================================================================================#####
 ####Gathering Describe output of all the Nodes
 echo "======================Gathering Describe output of all the nodes======================"
@@ -140,8 +170,8 @@ echo "======================Gathering All the Deployment namespace logs in the $
 echo "Checking ENDPOINTS"
 
 for EP in $(kubectl describe svc kube-dns -n kube-system|grep Endpoints|awk '{print $2}'|uniq|sed 's/,/\n/g'|sed 's/:[^[:blank:]]*//'); do
-echo "======================CHECKING Houston ENDPOINT for $EP======================";nslookup houston.$BASEDOMAIN >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log; echo " you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod" >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log
-echo " PLEASE NOTE ========>>>> you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod to make sure endpoints are running fine"
+echo "======================CHECKING Houston ENDPOINT for $EP======================";nslookup houston.$BASEDOMAIN > $DIR/nslookup_houston_$EP.$BASEDOMAIN.log; echo " you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod" >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log
+echo "PLEASE NOTE ======== you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod to make sure endpoints are running fine"
 done
 
 for i in {1..10} ;do curl -I  https://registry.$BASEDOMAIN; done  > $DIR/curl_check_registry.$BASEDOMAIN.log
