@@ -81,7 +81,7 @@ for NS in $(kubectl get ns --no-headers| awk '{print $1}');
 do
   for POD in $(kubectl get pods --no-headers -n $NS |awk '{ print $1}') ; do
     export POD=$POD;echo "Starting to Collect log of the pod $POD in $NS namespace";for container_name in $(kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
-    echo Collecting log of the container $container_name in pod $POD in the $NS namespace now;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name-container_$NS.log"  
+    echo Collecting log of the container $container_name in pod $POD in the $NS namespace now;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name-container.log"  
     done
 done
 done
@@ -97,7 +97,7 @@ for NODE in $(kubectl get nodes --no-headers |awk '{ print $1}') ; do
 done
 #####==================================================================================================================================================#####
 ####Gathering All the $ASTRONOMER_NAMESPACE logs###
-echo "======================Gathering All the $ASTRONOMER_NAMESPACE namespace logs======================"
+echo "======================Gathering All the Deployment logs in $ASTRONOMER_NAMESPACE namespace logs======================"
 echo "Gathering logs of houston in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-houston  > "$ASTRONOMER_NAMESPACE/houston$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of houston-worker in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-houston-worker  > "$ASTRONOMER_NAMESPACE/houston-worker$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of astro-ui in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-astro-ui > "$ASTRONOMER_NAMESPACE/astro-ui$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
