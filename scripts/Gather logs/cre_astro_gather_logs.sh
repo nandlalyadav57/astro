@@ -54,7 +54,6 @@ for NS in $(kubectl get ns --no-headers| awk '{print $1}'); do
 #####====================================================================================================================================================#####
 ####Gathering Describe output of bad state pods in all namespaces###
 
-
 #kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort
 #####====================================================================================================================================================#####
 #kubectl get pods astronomer-prometheus-0 -o jsonpath='{.spec.containers[*].name}' -n astronomer|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort
@@ -152,9 +151,10 @@ echo "======================Collecting Some General enviornment Information in t
       echo "Gathering persistent volume Status in $NS Namespace ";kubectl get pvc > "$NS/pvc_$NS.log" -n $NS
       echo "Gathering ingress Status in $NS Namespace ";kubectl get ingress > "$NS/ingress_$NS.log" -n $NS
       echo "Gathering cronjobs Status in $NS Namespace ";kubectl get cronjobs > "$NS/cronjobs_$NS.log" -n $NS
-      echo "Gathering jobs Status in $NS Namespace ";kubectl get jobs > "$NS/cronjobs_$NS.log" -n $NS
-      echo "Exporting Release name ";export Release_Name=$(echo $NS| cut -c 12-)
-      echo "Your Release_Name in current namespace is $Release_Name."
+      echo "Gathering jobs Status in $NS Namespace ";kubectl get jobs > "$NS/cronjobs_NS.log" -n $NS
+      echo "Number of digits to trim while getting release name";export X=$(echo $ASTRONOMER_NAMESPACE|wc -m);echo "VALUE to be increased by 1 for trimming is $X in $NS";export Y=$(($X+1)); echo "Number of digits to be trimmed while getting release name is $Y in $NS"
+      echo "Exporting Release name ";export Release_Name=$(echo $NS| cut -c $Y-)
+      echo "Your Release_Name in current namespace $NS is $Release_Name."
 echo "======================Gathering All the Deployment namespace logs in the $NS======================"
       echo "Gathering logs of scheduler in $NS Namespace ";kubectl logs deployment/$Release_Name-scheduler -c scheduler > "$NS/scheduler_$NS.log" -n $NS  
       echo "Gathering logs of worker in $NS Namespace ";kubectl logs deployment/$Release_Name-worker -c worker > "$NS/worker_$NS.log" -n $NS
@@ -167,7 +167,7 @@ echo "======================Gathering All the Deployment namespace logs in the $
       echo "Gathering helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/helm_history_$Release_Name.yaml"
       echo "Gathering helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
     done
-
+a=$(($v+1))
 echo "Checking ENDPOINTS"
 
 for EP in $(kubectl describe svc kube-dns -n kube-system|grep Endpoints|awk '{print $2}'|uniq|sed 's/,/\n/g'|sed 's/:[^[:blank:]]*//'); do
