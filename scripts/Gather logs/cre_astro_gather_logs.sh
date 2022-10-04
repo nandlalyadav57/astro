@@ -192,8 +192,8 @@ echo "======================creating GZ and zip files======================"
 #####====================================================================================================================================================#####
 cd "$DIR"
 cd ..
-tar -czvf "$DIR/astro_logs"_$(date +%F).tar.gz "$DIR"
-zip -r "$DIR/astro_logs"_$(date +%F).zip "$DIR"
+tar -czvf "astro_logs"_$(date +"%Y_%m_%d_%I_%M_%p").tar.gz "$DIR"
+zip -r "astro_logs"_$(date +%F).zip "$DIR"
 cdir=$PWD
 echo "Here is the list of files created:"
 ls -lhtr $DIR/*
