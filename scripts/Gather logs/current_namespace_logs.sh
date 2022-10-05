@@ -4,42 +4,12 @@ timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 #export ASTRONOMER_NAMESPACE=astronomer
 #export DIR="/tmp"
 #export BASEDOMAIN=nandlal51.astro-cre.com 
-echo "Enter your Astronomer Namespace Name:"
+echo "Enter the Primary Namespace where you want to collect All the important Infrastructure logs"
 read ASTRONOMER_NAMESPACE
 echo "Enter the path of directory where you want to keep your log files exported:"
 read DI
 export DIR=$DI/\astro_logs
-echo "If had a test cluster with the URL https://app.xyz.astro-cre.com then my base domain is xyz.astro-cre.com"
-echo "what is your basedomain:"
-read BASEDOMAIN
 
-
-#Get Astronomer Release name
-export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "$ASTRONOMER_NAMESPACE"|head -n1 | awk '{ print $1}')
-# Put the name of the deployment ASTRONOMER_NAMESPACE 1 where we are having issues
-#export DEPLOYMENT_NS1=astronomer-combusting-plane-6703
-# removing astronomer- and putting as release name
-#export Release1=$(echo $DEPLOYMENT_NS1| cut -c 12-)
-#setting log directory
-#export Ticket=12149
-#export mail="nandlalyadav57@yahoo.in"
-#Kinfly set base domain info for your cluster 
-##For e.g. I had a test cluster with the URL ```https://app.nandlal51.astro-cre.com`then my base domain is ```nandlal51.astro-cre.com``` ###
-#export BASEDOMAIN=nandlal51.astro-cre.com     <<<<MAKE SURE TO LOGIN ON ASTRO CLI>>>>>>>>>>>>>
-#astro auth login $BASEDOMAIN
-#export Release_Name=$(echo $NS| cut -c 12-)
-#####====================================================================================================================================================#####
-echo "====> Here is the list of Namespaces found:"
-kubectl get namespaces
-echo "====> You have specied $ASTRONOMER_NAMESPACE as a namespace where all the core Astronomer platform pods are running.Please make sure it's correctly specified."
-echo "====> Your astronomer release name is $ASTRONOMER_RELEASE."
-#echo $DEPLOYMENT_NS1
-#echo $Release1
-echo "====> The path where logs would be stored is $DIR."
-echo "====> Your Base Domain is $BASEDOMAIN.This means you should access your Astronomer UI at https://app.$BASEDOMAIN"
-#echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
-#echo "Mail would be sent to $mail using mutt & sendmail package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
-#####====================================================================================================================================================#####
 echo "====> cleaning any older $DIR directory to avoid script failure"
 rm -rf $DI/\astro_logs
 echo "====> Creating log file directory $DIR."
@@ -71,7 +41,7 @@ echo "======================Gathering Describe output of Bad state pod==========
 for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
 do
   for BAD_POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
-    export BAD_POD=$BAD_POD;echo $BAD_POD pod is in bad state;echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace ";kubectl describe pod $BAD_POD  > "$NS/$BAD_POD-BAD_$NS.log" -n $NS   
+    export BAD_POD=$BAD_POD;echo $BAD_POD pod is in bad state;echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace ";kubectl describe pod $BAD_POD  > "$NS/$BAD_POD-DescribeBADPOD_$NS.log" -n $NS   
     done
 done
 
@@ -85,8 +55,6 @@ do
     done
 done
 done
-
-
 
 
 echo "======================Gathering logs of All the pods ======================"
@@ -111,26 +79,18 @@ done
 #####==================================================================================================================================================#####
 ####Gathering All the $ASTRONOMER_NAMESPACE logs###
 echo "======================Gathering All the Deployment logs in $ASTRONOMER_NAMESPACE namespace logs======================"
-echo "Gathering logs of houston in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-houston  > "$ASTRONOMER_NAMESPACE/houston$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of houston-worker in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-houston-worker  > "$ASTRONOMER_NAMESPACE/houston-worker$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of astro-ui in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-astro-ui > "$ASTRONOMER_NAMESPACE/astro-ui$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of commander in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-commander  > "$ASTRONOMER_NAMESPACE/commander$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of nginx in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-nginx > "$ASTRONOMER_NAMESPACE/nginx_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of grafana in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-grafana > "$ASTRONOMER_NAMESPACE/grafana_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of kube-state in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-kube-state > "$ASTRONOMER_NAMESPACE/kube-state_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of kibana in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-kibana > "$ASTRONOMER_NAMESPACE/kibana_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE 
-echo "Gathering logs of nginx-default-backend in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-nginx-default-backend > "$ASTRONOMER_NAMESPACE/nginx-default-backend_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of elasticsearch-exporterin $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-elasticsearch-exporter> "$ASTRONOMER_NAMESPACE/grafana_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of elasticsearch-nginx in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-elasticsearch-nginx > "$ASTRONOMER_NAMESPACE/elasticsearch-nginx_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of cli-install in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-cli-install > "$ASTRONOMER_NAMESPACE/cli-install_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE 
-echo "Gathering logs of elasticsearch-client in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs deployment/astronomer-elasticsearch-client > "$ASTRONOMER_NAMESPACE/elasticsearch-client$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of elasticsearch-master in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-elasticsearch-master > "$ASTRONOMER_NAMESPACE/elasticsearch-master_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of elasticsearch-data in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-elasticsearch-data > "$ASTRONOMER_NAMESPACE/elasticsearch-data_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE  
-echo "Gathering logs of stan in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-stan -c stan > "$ASTRONOMER_NAMESPACE/stan_contatiner_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of registry in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-registry > "$ASTRONOMER_NAMESPACE/registry$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of prometheus in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-prometheus  -c prometheus   > "$ASTRONOMER_NAMESPACE/prometheus_container_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of nats in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-nats -c nats  > "$ASTRONOMER_NAMESPACE/nats_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering logs of alertmanager in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-alertmanager -c alertmanager  > "$ASTRONOMER_NAMESPACE/alertmanager_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
+
+
+echo "======================Gathering logs of All the pods ======================"
+for NS in $(kubectl get deployments --no-headers| awk '{print $1}'); 
+do
+  for DEPLOYMENT in $(kubectl get deployments --no-headers -n $NS |awk '{ print $1}') ; do
+    export POD=$DEPLOYMENT;echo "Starting to Collect log of the DEPLOYMENT $DEPLOYMENT in $NS namespace";for deployment_name in $(kubectl get pods $DEPLOYMENT -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
+    echo Collecting log of the Deployment $deployment_name in deployment $DEPLOYMENT in the $NS namespace now;kubectl logs deployment/$DEPLOYMENT -n $NS > "$NS/$DEPLOYMENT.log"  
+    done
+done
+done
+
 echo "======================Collecting Some General enviornment Information in the $ASTRONOMER_NAMESPACE======================"
 echo "Gathering get all status  in $ASTRONOMER_NAMESPACE Namespace";kubectl get all --all-namespaces > "$ASTRONOMER_NAMESPACE/getall_status_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering All replica status in all namespaces";kubectl get rs --all-namespaces|grep -v '0         0         0' > "$ASTRONOMER_NAMESPACE/rs_status_all_namespaces.log"
@@ -182,23 +142,6 @@ echo "======================Gathering All the Deployment namespace logs in the $
       echo "Gathering helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
     done
 
-echo "Checking ENDPOINTS"
-
-for EP in $(kubectl describe svc kube-dns -n kube-system|grep Endpoints|awk '{print $2}'|uniq|sed 's/,/\n/g'|sed 's/:[^[:blank:]]*//'); do
-echo "======================CHECKING Houston ENDPOINT for $EP======================";nslookup houston.$BASEDOMAIN > $DIR/nslookup_houston_$EP.$BASEDOMAIN.log; echo " you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod" >> $DIR/nslookup_houston_$EP.$BASEDOMAIN.log
-echo "PLEASE NOTE ======== you have to run nslookup houston.$BASEDOMAIN $EP inside any of the pods lets say inside a nginx pod to make sure endpoints are running fine"
-done
-
-for i in {1..10} ;do curl -I  https://registry.$BASEDOMAIN; done  > $DIR/curl_check_registry.$BASEDOMAIN.log
-for i in {1..10} ;do curl -I  https://app.$BASEDOMAIN/; done      > $DIR/curl_check_app.$BASEDOMAIN.log
-for i in {1..10} ;do curl -I  https://install.$BASEDOMAIN/; done  > $DIR/curl_check_install.$BASEDOMAIN.log
-
-#for i in {1..10} ;do curl -I  https://kibana.$BASEDOMAIN/; done
-#for i in {1..10} ;do curl -I  https://grafana.$BASEDOMAIN/; done
-#for i in {1..10} ;do curl -I  https://houston.$BASEDOMAIN/; done
-#for i in {1..10} ;do curl -I  https://deployments.$BASEDOMAIN; done
-#for i in {1..10} ;do curl -I  https://prometheus.$BASEDOMAIN; done
-#for i in {1..10} ;do curl -I  https://alertmanager.$BASEDOMAIN; done
 
 
 #####====================================================================================================================================================#####
