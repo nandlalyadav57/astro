@@ -1,23 +1,30 @@
 Implementation:
 
+~~~
 kubectl apply -f cron-job.yaml
 kubectl get cronjob -n mg-test
 kubectl config set-context --current --namespace=mg-test
 kubectl apply -f nginx_deployment.yaml
+~~~
+
 
 Rollback:
 
+~~~
 kubectl delete -f cron-job.yaml
 kubectl delete -f nginx_deployment.yaml
+~~~
 
 Test Case:
 
+~~~
 kubectl config set-context --current --namespace=mg-test
 kubectl apply -f nginx_deployment.yaml
 deployment.apps/nginx-deployment created
+~~~
 
 
-
+~~~
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,16 +46,17 @@ spec:
         image: nginx:1.14.2
         ports:
         - containerPort: 80
+~~~
 
 
 
-
-
+~~~
 kubectl apply -f cron-job.yaml
 serviceaccount/restart-nginx-deployment created
 role.rbac.authorization.k8s.io/restart-nginx-deployment created
 rolebinding.rbac.authorization.k8s.io/restart-nginx-deployment created
 cronjob.batch/restart-nginx-deployment created
+~~~
 
 
 
@@ -56,8 +64,7 @@ cronjob.batch/restart-nginx-deployment created
 
 
 
-
-
+~~~
 # Create file cron-job.yaml
 ---
 kind: ServiceAccount
@@ -119,15 +126,22 @@ spec:
                 - 'deployment/nginx-deployment'
 # kubectl apply -f cron-job.yaml
 # kubectl get cronjob -n mg-test
-
+~~~
 
 
 Manually triggered cronjob:
 
+![image](https://user-images.githubusercontent.com/33649510/195253530-7b7fb329-dcf6-475c-ae50-bb964591ffb8.png)
 
 
 
 
 Cronjob ran after 5 minutes:
 
+
+https://user-images.githubusercontent.com/33649510/195253581-98e79a62-41d4-4fc5-8c2c-75ac3c7db424.mp4
+
+
+
+![image](https://user-images.githubusercontent.com/33649510/195253549-4ff872eb-9157-426f-b414-da9734004468.png)
 
