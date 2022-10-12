@@ -1,8 +1,8 @@
 Implementation:
 
 kubectl apply -f cron-job.yaml
-kubectl get cronjob -n metricgaming-test
-kubectl config set-context --current --namespace=metricgaming-test
+kubectl get cronjob -n mg-test
+kubectl config set-context --current --namespace=mg-test
 kubectl apply -f nginx_deployment.yaml
 
 Rollback:
@@ -12,7 +12,7 @@ kubectl delete -f nginx_deployment.yaml
 
 Test Case:
 
-kubectl config set-context --current --namespace=metricgaming-test
+kubectl config set-context --current --namespace=mg-test
 kubectl apply -f nginx_deployment.yaml
 deployment.apps/nginx-deployment created
 
@@ -64,14 +64,14 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: restart-nginx-deployment
-  namespace: metricgaming-test
+  namespace: mg-test
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: restart-nginx-deployment
-  namespace: metricgaming-test
+  namespace: mg-test
 rules:
   - apiGroups: ["apps", "extensions"]
     resources: ["deployments"]
@@ -83,7 +83,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: restart-nginx-deployment
-  namespace: metricgaming-test
+  namespace: mg-test
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -91,13 +91,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: restart-nginx-deployment
-    namespace: metricgaming-test
+    namespace: mg-test
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: restart-nginx-deployment
-  namespace: metricgaming-test
+  namespace: mg-test
 spec:
   concurrencyPolicy: Forbid # Do not run concurrently!
   schedule: '*/5 * * * *'     # At every 5th minute
@@ -118,7 +118,7 @@ spec:
                 - 'restart'
                 - 'deployment/nginx-deployment'
 # kubectl apply -f cron-job.yaml
-# kubectl get cronjob -n metricgaming-test
+# kubectl get cronjob -n mg-test
 
 
 
