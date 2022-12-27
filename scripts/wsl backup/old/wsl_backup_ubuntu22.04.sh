@@ -27,3 +27,4 @@ wait
 # #Delete files older than 1 day
 # ForFiles /p "C:\Users\nandl\OneDrive - Astronomer\WSL_Backup" /s /d -1 /c "cmd /c del /q @file"
 # echo [%DATE%] [%TIME%] Done.
+exit
