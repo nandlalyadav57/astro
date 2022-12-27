@@ -6,7 +6,8 @@ echo "directory path is $DIR"
 #echo "====> Your Base Domain is $BASEDOMAIN.This means you should access your Astronomer UI at https://app.$BASEDOMAIN"
 #echo "You have specified zendesk ticket numeber as $Ticket & this would be used in the mail subject line."
 #echo "Mail would be sent to $mail using mutt & sendmail package in linux.If you don't have the package you can install it else you can simple attach the logs to the ticket."
-rm -rf "$DIR"
+cd "$DIR"
+rm "$DIR//*.*"
 wait
 mkdir -p "$DIR"
 wait
