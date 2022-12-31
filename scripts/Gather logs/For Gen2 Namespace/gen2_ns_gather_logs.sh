@@ -2,15 +2,16 @@
 timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 # Put the name of the astronomer ASTRONOMER_NAMESPACE below
 export ASTRONOMER_NAMESPACE=$(kubectl config view --minify -o jsonpath='{..namespace}')
-export DIR="/tmp/ASTRO_$(date +"%Y_%m_%d")"
+echo "====> Here is the list of Namespaces found:"
+kubectl get namespaces
+echo "====> You have specied $ASTRONOMER_NAMESPACE as a namespace where all the namespace pods are running.Please make sure it's correctly specified."
+export DIR="/tmp/astro_logs_$(date +"%Y_%m_%d")_$ASTRONOMER_NAMESPACE"
 #export BASEDOMAIN=nandlal51.astro-cre.com 
 #secho "Enter your Astronomer Namespace Name if it's not set already in context else press enter:"
 #read ASTRONOMER_NAMESPACE
 #echo "Enter the path of directory where you want to keep your log files exported:"
 #read DI
 #export DIR=$DI/\astro_logs
-
-
 #Get Astronomer Release name
 #export ASTRONOMER_RELEASE=$(helm ls -A|grep -i "$ASTRONOMER_NAMESPACE"|head -n1 | awk '{ print $1}')
 # Put the name of the deployment ASTRONOMER_NAMESPACE 1 where we are having issues
@@ -26,9 +27,7 @@ export DIR="/tmp/ASTRO_$(date +"%Y_%m_%d")"
 #astro auth login $BASEDOMAIN
 #export Release_Name=$(echo $NS| cut -c 12-)
 #####====================================================================================================================================================#####
-echo "====> Here is the list of Namespaces found:"
-kubectl get namespaces
-echo "====> You have specied $ASTRONOMER_NAMESPACE as a namespace where all the core Astronomer platform pods are running.Please make sure it's correctly specified."
+
 #echo "====> Your astronomer release name is $ASTRONOMER_RELEASE."
 #echo $DEPLOYMENT_NS1
 #echo $Release1
@@ -144,9 +143,14 @@ echo "======================creating GZ and zip files======================"
 #####====================================================================================================================================================#####
 cd "$DIR"
 cd ..
-tar -czvf "astro_logs"_$(date +"%Y_%m_%d_%I_%M_%p").tar.gz "$DIR"
-zip -r "astro_logs"_$(date +"%Y_%m_%d_%I_%M_%p").zip "$DIR"
+#tar -czvf "astro_logs"_$(date +"%Y_%m_%d_%I_%M_%p").tar.gz "$DIR"
+zip -r "astro_logs"_$(date +"%Y_%m_%d_%I_%M_%p")_$ASTRONOMER_NAMESPACE.zip "$DIR"
+cd "$DIR"
+cd "$ASTRONOMER_NAMESPACE"
+cd ..
+zip -r "Deployment_logs"_$(date +"%Y_%m_%d_%I_%M_%p")_$ASTRONOMER_NAMESPACE.zip "$ASTRONOMER_NAMESPACE"
 cdir=$PWD
+we ended the script execution at $PWD Directory.
 echo "Here is the list of files created:"
 ls -lhtr $DIR/*
 ls -lhtr $DIR/$ASTRONOMER_NAMESPACE*
