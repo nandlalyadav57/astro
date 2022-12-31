@@ -150,7 +150,7 @@ cd "$ASTRONOMER_NAMESPACE"
 cd ..
 zip -r "Deployment_logs"_$(date +"%Y_%m_%d_%I_%M_%p")_$ASTRONOMER_NAMESPACE.zip "$ASTRONOMER_NAMESPACE"
 cdir=$PWD
-we ended the script execution at $PWD Directory.
+echo "we ended the script execution at $PWD Directory."
 echo "Here is the list of files created:"
 ls -lhtr $DIR/*
 ls -lhtr $DIR/$ASTRONOMER_NAMESPACE*
