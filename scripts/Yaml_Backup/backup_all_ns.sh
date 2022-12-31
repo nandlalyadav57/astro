@@ -116,7 +116,7 @@ echo "Taking backup of $IPAMBlock IPAMBlock ";kubectl get IPAMBlock $IPAMBlock -
 for IPPool in $(kubectl get IPPool --no-headers |awk '{ print $1}') ; do
 echo "Taking backup of $IPPool IPPool  ";kubectl get IPPool $IPPool -o yaml  > "$other/IPPool_$IPPool.yaml" ;done   
 for IPAMHandle in $(kubectl get IPAMHandle --no-headers |awk '{ print $1}') ; do
-echo "Taking backup of $IPAMHandle ";kubectl get IPAMHandle $IPAMHandle -o yaml  > "$other/IPAMHandle_$IPAMHandle.yaml";done    
+echo "Taking backup of $IPAMHandle IPAMHandle";kubectl get IPAMHandle $IPAMHandle -o yaml  > "$other/IPAMHandle_$IPAMHandle.yaml";done    
 for KubeControllersConfiguration in $(kubectl get KubeControllersConfiguration --no-headers |awk '{ print $1}') ; do
 echo "Taking backup of $KubeControllersConfiguration KubeControllersConfiguration";kubectl get KubeControllersConfiguration $KubeControllersConfiguration -o yaml  > "$other/KubeControllersConfiguration_$KubeControllersConfiguration.yaml";done    
 for VolumeSnapshotClass in $(kubectl get VolumeSnapshotClass --no-headers |awk '{ print $1}') ; do
