@@ -1,0 +1,2 @@
+helm get values astronomer -n astronomer -o yaml > value.yaml  (Take Backup)
+helm upgrade -f value.yaml  --reuse-values astronomer astronomer/astronomer --version=<platform version> --debug --set astronomer.houston.upgradeDeployments.enabled=false --timeout=20m -n astronomer
