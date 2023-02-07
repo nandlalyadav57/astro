@@ -1,3 +1,7 @@
+
+helm ls -A
+
+
   (Take Backup)
 
 helm get values astronomer -n astronomer -o yaml > value.yaml
