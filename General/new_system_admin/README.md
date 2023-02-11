@@ -40,14 +40,11 @@ apt update && apt install postgresql-client
 
 ~~~
 psql <string from step 2>
-
-
-
+~~~
 
 You Can also simply use this command to skip steps 1 to 6 :
 
 ```kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='' | sed 's/?.*//g')```
-
 
 
 7:- Access the Houston database:
@@ -55,6 +52,7 @@ You Can also simply use this command to skip steps 1 to 6 :
 ~~~
 \l  (to list databases)
 ~~~
+
 ~~~
 \c <releasename>_houston
 ~~~
@@ -65,9 +63,9 @@ You Can also simply use this command to skip steps 1 to 6 :
 set search_path="houston$default";
 ~~~
 
-
-##Database Changes  
-=======================================================================================================
+*******************************************************************************************
+****Database Changes****  
+*******************************************************************************************
 
 9:-  Find the user you want:
 
@@ -94,7 +92,7 @@ UPDATE "RoleBinding" SET "userId" = '<id from step 9>' WHERE "id" = '<id from st
 
 
 *******************************************************************************************
-##Exit
+****Exit****
 *******************************************************************************************
 12:- Exit Postgres:
 
