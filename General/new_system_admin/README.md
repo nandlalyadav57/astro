@@ -44,11 +44,11 @@ apt update && apt install postgresql-client
 psql <string from step 2>
 ~~~
 
-
 **skip steps 1 to 6**
 
-
-```kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='' | sed 's/?.*//g')```
+~~~
+kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='' | sed 's/?.*//g')```
+~~~
 
 
 7:- Access the Houston database:
