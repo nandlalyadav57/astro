@@ -1,5 +1,5 @@
 
-Please note you can either follow ---> **step 1 to 6** or  **step 7**
+Please note you can either follow ---> **step 1 to 6** or  **step 7**  (preferbale & takes less time)
 
 • The difference would be we will spin a pod manually in step 1 to 6 and pass a string to connect database in those steps.
 
