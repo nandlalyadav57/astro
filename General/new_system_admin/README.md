@@ -45,7 +45,7 @@ psql <string from step 2>
 ~~~
 
 
-You Can also simply use this command to skip steps 1 to 6 :
+**skip steps 1 to 6**
 
 
 ```kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='' | sed 's/?.*//g')```
