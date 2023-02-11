@@ -1,5 +1,5 @@
 
-Please note you can either follow ---> **step 1 to 6** or  **step 7**  (preferbale & takes less time)
+Please note you can either follow ---> **step 1 to 6** or simply run the command just above **step 7**  (preferbale & takes less time)
 
 • The difference would be we will spin a pod manually in step 1 to 6 and pass a string to connect database in those steps.
 
@@ -44,7 +44,9 @@ apt update && apt install postgresql-client
 psql <string from step 2>
 ~~~
 
+
 You Can also simply use this command to skip steps 1 to 6 :
+
 
 ```kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='' | sed 's/?.*//g')```
 
