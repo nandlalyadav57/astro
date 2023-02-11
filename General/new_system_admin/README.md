@@ -1,9 +1,9 @@
 
-Please note you can either follow ---> **step 1 to 6** or simply run the command just above **step 7**  (preferbale & takes less time)
+Please note you can either follow ---> **step 1 to 6** or simply run the command just above **step 7**  (preferbale & takes less time).  
 
-• The difference would be we will spin a pod manually in step 1 to 6 and pass a string to connect database in those steps.
+•  we will spin a pod manually in step 1 to 6 and pass a string from the secret to connect to database.
 
-• The alternate method which is single line command just does similar by spinning up a different pssql pod using bitnami/postgresql image.
+• The other method which is single line command just does similar thing by spinning up a different pssql pod using bitnami/postgresql image.
 
 
 Here is the list of commands you need to run:-
