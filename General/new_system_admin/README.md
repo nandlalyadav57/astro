@@ -1,5 +1,11 @@
 Here is the list of commands you need to run:-
 
+
+Please note you can either follow step 1 to 6 or simply the run the command above step 7
+The difference would be we will sping a pod manually in step 1 to 6 and pass a string to connect database in those steps.
+The alternate method just does similar by spinning up a different pssql pod
+
+
 1:- Set cluster context:
 
 ~~~
@@ -60,10 +66,6 @@ set search_path="houston$default";
 ~~~
 
 
-
-
-
-=======================================================================================================
 ##Database Changes  
 =======================================================================================================
 
