@@ -60,7 +60,7 @@ kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami
 example:
 
 ~~~
-astronomer_grafana=> \l
+=> \l
                                                List of databases
                 Name                 |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges
 -------------------------------------+----------+----------+-------------+-------------+-----------------------
