@@ -47,7 +47,7 @@ psql <string from step 2>
 **Skip steps 1 to 6 & Simply run below command:**
 
 ~~~
-kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='' | sed 's/?.*//g')```
+kubectl run psql --rm -it --restart=Never --namespace astronomer --image bitnami/postgresql --command -- psql $(kubectl get secret -n astronomer astronomer-houston-backend --template='{{.data.connection | base64decode }}' | sed 's/?.*//g')
 ~~~
 
 
