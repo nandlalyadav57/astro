@@ -8,7 +8,7 @@ kubectl scale sts astronomer-prometheus --replicas=1 -n astronomer
 
 Also, please reduce the data retention period if you still need to. Please refer [here](https://github.com/nandlalyadav57/astro/blob/main/General/prometheus%20memory%20tuning/oom_fix_general.md)
 
-• Kindly try to [enable-feature=memory-snapshot-on-shutdown](https://prometheus.io/docs/prometheus/latest/feature_flags/#memory-snapshot-on-shutdown). It will look like [this](https://github.com/nandlalyadav57/astro/blob/main/General/prometheus%20memory%20tuning/2023-06-27_10h18_39.png) under the argument section Prometheus sts.
+• Kindly try to [enable-feature=memory-snapshot-on-shutdown](https://prometheus.io/docs/prometheus/latest/feature_flags/#memory-snapshot-on-shutdown). This will reduce the startup time since the memory state can be restored with this snapshot and m-mapped chunks without the need of WAL replay.It will look like [this](https://github.com/nandlalyadav57/astro/blob/main/General/prometheus%20memory%20tuning/2023-06-27_10h18_39.png) under the argument section Prometheus sts.
 
 ~~~
 prometheus:
@@ -23,7 +23,7 @@ prometheus:
 ~~~
 
 • Due to some OSS changes, There is a known issue for data ingestions through statsd. We can use the below under statsd to get specific metrics only. Reference: helm values [here](https://github.com/astronomer/airflow-chart/blob/master/values.yaml#L366-L456).
-The changes should look like [this](https://github.com/nandlalyadav57/astro/blob/main/General/prometheus%20memory%20tuning/2023-06-27_10h09_27.png) in Houston config map. After Applying the change manually, we should do a rollout restart Houston and houston-worker.
+The changes should look like [this](https://github.com/nandlalyadav57/astro/blob/main/General/prometheus%20memory%20tuning/2023-06-27_10h09_27.png) in Houston config map. After Applying the change manually, we should do a rollout restart houston and houston-worker.
 
 ~~~
            statsd:
@@ -96,13 +96,3 @@ The changes should look like [this](https://github.com/nandlalyadav57/astro/blob
                 match_type: regex
                 name: dropped
 ~~~
-
-
-
-
-
-
-Reference
-
-
-Also, unused labels we can drop to make things better
