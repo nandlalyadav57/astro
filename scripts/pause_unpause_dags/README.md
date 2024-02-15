@@ -107,33 +107,106 @@ from enum import Enum
 from typing import Union, List
 from airflow.exceptions import AirflowBadRequest
 
+
 class Operation(Enum):
-    # ... (Enum for operations)
+    GET = 0
+    PAUSE = 1
+
 
 class PauseDagsOperator(BaseOperator):
-    # ... (Operator code)
+    # required to be set in execute
+    context = None
+
+    def __init__(self, operation: Operation, pause: Union[bool, None] = None, dag_list: List[DagModel] = [], *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # do some checks to make sure that we get the right parameters
+        if operation == Operation.GET and (pause is not None or len(dag_list) != 0):
+            raise AirflowBadRequest(
+                "If GET operation is desire, pause and dag_list parameters should not be set"
+            )
+        elif operation == Operation.PAUSE and (pause is None or len(dag_list) == 0):
+            raise AirflowBadRequest(
+                "If PAUSE or UNPAUSE operation is desired, pause and dag_list parameters should be set"
+            )
+        self.template_fields = ("dag_list",)
+    
+        self.operation = operation
+        self.pause = pause
+        self.dag_list = dag_list
+
+    def _get_paused_dags_list(self):
+        self.context["ti"].xcom_push(key="paused_dags", value=Session().query(DagModel).filter(
+            DagModel.is_active,
+            ~DagModel.is_paused,
+            DagModel.dag_id != self.context["dag"].dag_id
+        ).all())
+    
+    def _pause_dags_in_list(self):
+        for dag in self.dag_list:
+            dag.set_is_paused(self.pause)
+
+    def execute(self, context):
+        self.context = context
+        operations_map = {
+            Operation.GET: self._get_paused_dags_list,
+            Operation.PAUSE: self._pause_dags_in_list,
+        }
+        operations_map[self.operation]()
 ```
+
+The above operator can be used in a DAG as follows:
 
 **Usage in DAG:**
 ```python
-# ... (import statements and DAG definition)
+from datetime import datetime
+from time import sleep
+from airflow.operators.python import PythonOperator
+from airflow.models import DAG
+from plugins.pause_controller import Operation, PauseDagsOperator
 
-get_unpaused_dags = PauseDagsOperator(
-    task_id="get_unpaused_dags",
-    operation=Operation.GET
-)
 
-pause_dags = PauseDagsOperator(
-    task_id="pause_running_dags",
-    operation=Operation.PAUSE,
-    pause=True,
-    dag_list="{{ ti.xcom_pull(task_ids='get_unpaused_dags', key='paused_dags') }}"
-)
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'email_on_failure': False,
+    'email_on_retry': False,
+}
 
-# ... (other tasks in DAG)
 
-get_unpaused_dags >> pause_dags >> just_sleep >> unpause_the_dags_that_were_paused
+with DAG(
+    dag_id="test_pausing_dags",
+    default_args=default_args,
+    catchup=False,
+    schedule_interval=None,
+    start_date=datetime(1970, 1, 1),
+    render_template_as_native_obj=True,
+) as dag:
+    get_unpaused_dags = PauseDagsOperator(
+        task_id="get_unpaused_dags",
+        operation=Operation.GET
+    )
+
+    pause_dags = PauseDagsOperator(
+        task_id="pause_running_dags",
+        operation=Operation.PAUSE,
+        pause=True,
+        dag_list="{{ ti.xcom_pull(task_ids='get_unpaused_dags', key='paused_dags') }}"
+    )
+
+    just_sleep = PythonOperator(
+        task_id="just_sleep_and_wait",
+        python_callable=lambda: sleep(15)
+    )
+
+    unpause_the_dags_that_were_paused = PauseDagsOperator(
+        task_id="unpause_the_dags_that_were_paused",
+        operation=Operation.PAUSE,
+        pause=False,
+        dag_list="{{ ti.xcom_pull(task_ids='get_unpaused_dags', key='paused_dags') }}"
+    )
+
+     get_unpaused_dags >> pause_dags >> just_sleep >> unpause_the_dags_that_were_paused
 ```
 
-This how-to guide provides scripts and an Airflow operator to programmatically pause and unpause DAGs, along with usage examples.
+This how-to guide provides scripts and an Airflow operator to pause and unpause DAGs, along with usage examples programmatically.
 ```
