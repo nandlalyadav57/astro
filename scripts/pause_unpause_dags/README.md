@@ -1,98 +1,139 @@
-Pause/Unpause DAGs Script Readme
-Goal
-This script provides a convenient way to programmatically pause and unpause DAGs in an Airflow instance. It can be used for both general Airflow instances and specifically for Astronomer deployments.
+```markdown
+# Airflow How-To: Programmatically Pause/Unpause DAGs
 
-Steps
-Prerequisites
-Before using this script, ensure you have an API key for the respective Astronomer product. You can generate this key by following the instructions in the Airflow API documentation.
 
-Usage
-Python + Airflow REST API (Astro)
-bash
-Copy code
-# Pause all DAGs
-# To unpause, change the action arg to "unpause"
-python3 pause_unpause_dags_cloud.py \
-  --action pause \
-  --airflow_url <Airflow URL> \
-  --token <token generated from API key/secret>
 
-# Pause a list of DAGs
-# To unpause, change the action arg to "unpause"
-python3 pause_unpause_dags_cloud.py \
-  --action pause \
-  --airflow_url <Airflow URL> \
-  --token <token generated from API key/secret> \
-  --dag_ids dag_id_1 dag_id_2 dag_id_3
-Astronomer Software
-bash
-Copy code
-# Pause all DAGs
-# To unpause, change the action arg to "unpause"
-python3 pause_unpause_dags_astronomer_software.py \
-  --action pause \
-  --api_key <api key> \
-  --deployment <deployment name> \
-  --domain <Astronomer software base domain>
+## Goal
+Programmatically pause and unpause DAGs using the Airflow API.
 
-# Pause a list of DAGs
-# To unpause, change the action arg to "unpause"
-python3 pause_unpause_dags_astronomer_software.py \
-  --action pause \
-  --api_key <api key> \
-  --deployment <deployment name> \
-  --domain <Astronomer software base domain> \
-  --dag_ids dag_id_1 dag_id_2 dag_id_3
-Custom Airflow Operator
-The provided custom Airflow operator, PauseDagsOperator, allows you to integrate DAG pausing/unpausing into your Airflow DAGs.
+## Prerequisites
+- Generate an API key for the respective Astronomer product. Refer to the KB article for details.
 
-Usage in a DAG
-python
-Copy code
-from datetime import datetime
-from time import sleep
-from airflow.operators.python import PythonOperator
-from airflow.models import DAG
-from plugins.pause_controller import Operation, PauseDagsOperator
+## Python + Airflow REST API
+**Script: `pause_unpause_dags_cloud.py`**
 
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
-}
+```python
+"""
+Programmatically pause and unpause DAGs
+"""
+import json
+from typing import List
+import requests
 
-with DAG(
-    dag_id="test_pausing_dags",
-    default_args=default_args,
-    catchup=False,
-    schedule_interval=None,
-    start_date=datetime(1970, 1, 1),
-    render_template_as_native_obj=True,
-) as dag:
-    get_unpaused_dags = PauseDagsOperator(
-        task_id="get_unpaused_dags",
-        operation=Operation.GET
-    )
+class PauseUnpauseDags:
+    def __init__(
+        self,
+        url: str,
+        token: str,
+    ) -> None:
+        self.url = f"{url}/api/v1/dags"
+        self.token = token
 
-    pause_dags = PauseDagsOperator(
-        task_id="pause_running_dags",
-        operation=Operation.PAUSE,
-        pause=True,
-        dag_list="{{ ti.xcom_pull(task_ids='get_unpaused_dags', key='paused_dags') }}"
-    )
+    def _get_all_dag_ids(self) -> List[str]:
+        # ... (code for getting DAG IDs)
 
-    just_sleep = PythonOperator(
-        task_id="just_sleep_and_wait",
-        python_callable=lambda: sleep(15)
-    )
+    def pause_dags(self, dag_ids: List[str] = []) -> None:
+        # ... (code for pausing DAGs)
 
-    unpause_the_dags_that_were_paused = PauseDagsOperator(
-        task_id="unpause_the_dags_that_were_paused",
-        operation=Operation.PAUSE,
-        pause=False,
-        dag_list="{{ ti.xcom_pull(task_ids='get_unpaused_dags', key='paused_dags') }}"
-    )
+    def unpause_dags(self, dag_ids: List[str] = []) -> None:
+        # ... (code for unpausing DAGs)
 
-    get_unpaused_dags >> pause_dags >> just_sleep >> unpause_the_dags_that_were_paused
-Feel free to adapt and extend this script and the provided custom operator based on your specific requirements.
+if __name__ == "__main__":
+    # ... (command-line argument parsing and execution)
+```
+
+**Usage:**
+- Pause all DAGs:
+  ```bash
+  python3 pause_unpause_dags_cloud.py --action pause --airflow_url <Airflow URL> --token <token>
+  ```
+- Pause specific DAGs:
+  ```bash
+  python3 pause_unpause_dags_cloud.py --action pause --airflow_url <Airflow URL> --token <token> --dag_ids dag_id_1 dag_id_2 dag_id_3
+  ```
+
+**Astronomer Software**
+**Script: `pause_unpause_dags_astronomer_software.py`**
+
+```python
+"""
+Programmatically pause and unpause DAGs
+"""
+import json
+from typing import List
+import requests
+
+class PauseUnpauseDags:
+    def __init__(
+        self,
+        api_key: str,
+        deployment: str,
+        domain: str,
+    ) -> None:
+        self.api_key = api_key
+        self.url = f"https://deployments.{domain}/{deployment}/airflow/api/v1/dags"
+
+    def _get_all_dag_ids(self) -> List[str]:
+        # ... (code for getting DAG IDs)
+
+    def pause_dags(self, dag_ids: List[str] = []) -> None:
+        # ... (code for pausing DAGs)
+
+    def unpause_dags(self, dag_ids: List[str] = []) -> None:
+        # ... (code for unpausing DAGs)
+
+if __name__ == "__main__":
+    # ... (command-line argument parsing and execution)
+```
+
+**Usage:**
+- Pause all DAGs:
+  ```bash
+  python3 pause_unpause_dags_astronomer_software.py --action pause --api_key <api key> --deployment <deployment name> --domain <domain>
+  ```
+- Pause specific DAGs:
+  ```bash
+  python3 pause_unpause_dags_astronomer_software.py --action pause --api_key <api key> --deployment <deployment name> --domain <domain> --dag_ids dag_id_1 dag_id_2 dag_id_3
+  ```
+
+## Custom Airflow Operator
+**Operator: `PauseDagsOperator`**
+
+```python
+from airflow.models.baseoperator import BaseOperator
+from airflow.settings import Session
+from airflow.models import DagModel
+from enum import Enum
+from typing import Union, List
+from airflow.exceptions import AirflowBadRequest
+
+class Operation(Enum):
+    # ... (Enum for operations)
+
+class PauseDagsOperator(BaseOperator):
+    # ... (Operator code)
+```
+
+**Usage in DAG:**
+```python
+# ... (import statements and DAG definition)
+
+get_unpaused_dags = PauseDagsOperator(
+    task_id="get_unpaused_dags",
+    operation=Operation.GET
+)
+
+pause_dags = PauseDagsOperator(
+    task_id="pause_running_dags",
+    operation=Operation.PAUSE,
+    pause=True,
+    dag_list="{{ ti.xcom_pull(task_ids='get_unpaused_dags', key='paused_dags') }}"
+)
+
+# ... (other tasks in DAG)
+
+get_unpaused_dags >> pause_dags >> just_sleep >> unpause_the_dags_that_were_paused
+```
+
+This how-to guide provides scripts and an Airflow operator to programmatically pause and unpause DAGs, along with usage examples.
+```
