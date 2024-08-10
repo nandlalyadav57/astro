@@ -74,9 +74,11 @@ cd "$DIR"
 for NS in $(kubectl get ns --no-headers | awk '{print $1}'); do
   echo "Creating namespace $NS directory"
   mkdir -p "$NS/AllPodlogs"
+  mkdir -p "$NS/AllPodlogs/morelogs"
   mkdir -p "$NS/BadPods"
   mkdir -p "$NS/Helm"
   mkdir -p "$NS/Resources"
+  mkdir -p "$NS/DescribePods"  # New directory for describe output of all pods
 
   # Get all Helm releases in the current namespace
   releases=$(helm list -n "$NS" -o json | grep -oP '(?<="name":")[^"]*')
@@ -125,12 +127,19 @@ for NS in $(kubectl get ns --no-headers | awk '{print $1}'); do
   # Get status of all pods in the namespace
   kubectl get pods -n "$NS" -o wide > "$NS/${NS}_all_pods_status.txt"
 
+  echo "======================Gathering Describe output of all pods in $NS======================"
+  # Loop through all pods and describe them
+  for POD in $(kubectl get pods --no-headers -n "$NS" | awk '{print $1}'); do
+    echo "Describing pod '$POD' in namespace '$NS'"
+    kubectl describe pod "$POD" -n "$NS" > "$NS/DescribePods/${POD}_describe.txt"
+  done
+
   echo "======================Gathering Describe output of Bad state pod in $NS======================"
   # Loop through pods in a bad state
   for BAD_POD in $(kubectl get pods --no-headers -n "$NS" | grep -v Running | grep -v Completed | awk '{print $1}'); do
     echo "$BAD_POD pod is in a bad state"
     echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace"
-    kubectl describe pod "$BAD_POD" -n "$NS" > "$NS/BadPods/$BAD_POD-BAD_$NS.log"
+    kubectl describe pod "$BAD_POD" -n "$NS" > "$NS/BadPods/$BAD_POD-BAD_$NS.describe.txt"
   done
 
   echo "======================Gathering log output of Bad state pod in $NS======================"
@@ -174,6 +183,7 @@ for NS in $(kubectl get ns --no-headers | awk '{print $1}'); do
   kubectl get ingress -n "$NS" > "$NS/${NS}_ingresses.txt"
 
 done
+
 
  #========================================================== #========================================================== #========================================================== #==========================================================
 
@@ -280,9 +290,8 @@ echo "Gathering logs of registry in $ASTRONOMER_NAMESPACE Namespace ";kubectl lo
 echo "Gathering logs of prometheus in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-prometheus  -c prometheus   > "$ASTRONOMER_NAMESPACE/Deployment_logs/prometheus_container_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of nats in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-nats -c nats  > "$ASTRONOMER_NAMESPACE/Deployment_logs/nats_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering logs of alertmanager in $ASTRONOMER_NAMESPACE Namespace ";kubectl logs sts/astronomer-alertmanager -c alertmanager  > "$ASTRONOMER_NAMESPACE/Deployment_logs/alertmanager_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "======================Collecting Some General enviornment Information in the $ASTRONOMER_NAMESPACE======================"
-echo "Gathering get all status  in $ASTRONOMER_NAMESPACE Namespace";kubectl get all --all-namespaces > "$DIR/getall_status_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering All replica status in all namespaces";kubectl get rs --all-namespaces|grep -v '0         0         0' > "$DIR/Deployment_logs/rs_status_all_namespaces.log"
+echo "Gathering helm history in $ASTRONOMER_NAMESPACE Namespace";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > "$ASTRONOMER_NAMESPACE/Deployment_logs/helm_history_$ASTRONOMER_RELEASE.log"
+echo "Gathering helm values from $ASTRONOMER_NAMESPACE Namespace";helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > "$ASTRONOMER_NAMESPACE/Deployment_logs/helm_values_$ASTRONOMER_RELEASE.yaml"
 # echo "Gathering Pod Running status in $ASTRONOMER_NAMESPACE Namespace";kubectl get pods -o wide > "$ASTRONOMER_NAMESPACE/Deployment_logs/pods_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 # echo "Gathering events in $ASTRONOMER_NAMESPACE Namespace ";kubectl get events > "$ASTRONOMER_NAMESPACE/Deployment_logs/events_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 # echo "Gathering secrets in $ASTRONOMER_NAMESPACE Namespace ";kubectl get secrets > "$ASTRONOMER_NAMESPACE/Deployment_logs/secrets_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
@@ -293,6 +302,9 @@ echo "Gathering All replica status in all namespaces";kubectl get rs --all-names
 # echo "Gathering ingress Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get ingress > "$ASTRONOMER_NAMESPACE/Deployment_logs/ingress_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 # echo "Gathering cronjobs Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get cronjobs > "$ASTRONOMER_NAMESPACE/Deployment_logs/cronjobs_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 # echo "Gathering jobs Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get jobs > "$ASTRONOMER_NAMESPACE/Deployment_logs/jobs_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
+
+
+#Getting Some enviornment Info at root $DIR 
 echo "Gathering Diskspace of Registry pod in $ASTRONOMER_NAMESPACE Namespace ";kubectl get pods -n $ASTRONOMER_NAMESPACE  | grep registry | awk '{print $1}' | xargs -I {} kubectl exec -it -n $ASTRONOMER_NAMESPACE  {} -- df -Th > "$ASTRONOMER_NAMESPACE/Deployment_logs/Registry_Diskspace_$ASTRONOMER_NAMESPACE.log"
 echo "=======================Astro version output==========================================================================" > "$ASTRONOMER_NAMESPACE/Deployment_logs/Enviornment_Info.log"
 echo "Gathering Astro version status";astro version  >> "$DIR/Enviornment_Info.log"
@@ -301,39 +313,38 @@ echo "Gathering docker version status";docker version  >> "$DIR/Enviornment_Info
 echo "=======================helm version output==========================================================================" >> "$ASTRONOMER_NAMESPACE/Deployment_logs/Enviornment_Info.log"
 echo "Gathering helm version status";helm version  >> "$DIR/Enviornment_Info.log"
 echo "Gathering helm status";helm ls -A >> "$DIR/helm_status.log"
-echo "Gathering helm history in $ASTRONOMER_NAMESPACE Namespace";helm history $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE > "$ASTRONOMER_NAMESPACE/Deployment_logs/helm_history_$ASTRONOMER_RELEASE.log"
-echo "Gathering helm values from $ASTRONOMER_NAMESPACE Namespace";helm get values $ASTRONOMER_RELEASE -n $ASTRONOMER_NAMESPACE -o yaml > "$ASTRONOMER_NAMESPACE/Deployment_logs/helm_values_$ASTRONOMER_RELEASE.yaml"
+echo "======================Collecting Some General enviornment Information in the $ASTRONOMER_NAMESPACE======================"
+echo "Gathering get all status  in $ASTRONOMER_NAMESPACE Namespace";kubectl get all --all-namespaces > "$DIR/getall_status_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
+echo "Gathering All replica status in all namespaces";kubectl get rs --all-namespaces|grep -v '0         0         0' > "$DIR/rs_status_all_namespaces.log"
 
-
-####Gathering All the Deployment namespace logs###
+####Gathering All the Deployment namespace minus astronomer release namespaces logs###
 for NS in $(kubectl get ns --no-headers|grep -i "$ASTRONOMER_NAMESPACE-" | awk '{print $1}'); do
 echo "======================Collecting Some General enviornment Information in the $NS======================"
-      echo "Gathering get all status  in $NS Namespace";kubectl get all > "$NS/getall_status_$NS.log" -n $NS
-      echo "Gathering All replica status in all namespaces";kubectl get rs -n $NS|grep -v '0         0         0' > "$NS/rs_status_all_namespaces.log"
-      echo "Gathering Pod Running status in $NS Namespace";kubectl get pods -o wide > "$NS/pods_$NS.log" -n $NS
-      echo "Gathering events in $NS Namespace ";kubectl get events > "$NS/events_$NS.log" -n $NS
-      echo "Gathering secrets in $NS Namespace ";kubectl get secrets > "$NS/secrets_$NS.log" -n $NS
-      echo "Gathering sevice Status in $NS Namespace ";kubectl get svc > "$NS/svc_$NS.log" -n $NS
-      echo "Gathering persistent volume Status in $NS Namespace ";kubectl get pvc > "$NS/$PVC_DIR/pvc_$NS.log" -n $NS
-      echo "Gathering ingress Status in $NS Namespace ";kubectl get ingress > "$NS/ingress_$NS.log" -n $NS
-      echo "Gathering cronjobs Status in $NS Namespace ";kubectl get cronjobs > "$NS/cronjobs_$NS.log" -n $NS
-      echo "Gathering jobs Status in $NS Namespace ";kubectl get jobs > "$NS/cronjobs_NS.log" -n $NS
+      echo "Gathering get all status  in $NS Namespace";kubectl get all > "$NS/AllPodlogs/morelogs/getall_status_$NS.log" -n $NS
+      echo "Gathering All replica status in all namespaces";kubectl get rs -n $NS|grep -v '0         0         0' > "$NS/AllPodlogs/morelogs/rs_status_all_namespaces.log"
+      echo "Gathering Pod Running status in $NS Namespace";kubectl get pods -o wide > "$NS/AllPodlogs/morelogs/pods_$NS.log" -n $NS
+      echo "Gathering events in $NS Namespace ";kubectl get events > "$NS/AllPodlogs/morelogs/events_$NS.log" -n $NS
+      echo "Gathering secrets in $NS Namespace ";kubectl get secrets > "$NS/AllPodlogs/morelogs/secrets_$NS.log" -n $NS
+      echo "Gathering sevice Status in $NS Namespace ";kubectl get svc > "$NS/AllPodlogs/morelogs/svc_$NS.log" -n $NS
+      echo "Gathering persistent volume Status in $NS Namespace ";kubectl get pvc > "$NS/AllPodlogs/morelogs/$PVC_DIR/pvc_$NS.log" -n $NS
+      echo "Gathering ingress Status in $NS Namespace ";kubectl get ingress > "$NS/AllPodlogs/morelogs/ingress_$NS.log" -n $NS
+      echo "Gathering cronjobs Status in $NS Namespace ";kubectl get cronjobs > "$NS/AllPodlogs/morelogs/cronjobs_$NS.log" -n $NS
+      echo "Gathering jobs Status in $NS Namespace ";kubectl get jobs > "$NS/AllPodlogs/morelogs/cronjobs_NS.log" -n $NS
       echo "Number of digits to trim while getting release name";export X=$(echo $ASTRONOMER_NAMESPACE|wc -m);echo "VALUE to be increased by 1 for trimming is $X in $NS";export Y=$(($X+1)); echo "Number of digits to be trimmed while getting release name is $Y in $NS"
       echo "Exporting Release name ";export Release_Name=$(echo $NS| cut -c $Y-)
       echo "Your Release_Name in current namespace $NS is $Release_Name."
 echo "======================Gathering All the Deployment namespace logs in the $NS======================"
-      echo "Gathering logs of scheduler in $NS Namespace ";kubectl logs deployment/$Release_Name-scheduler -c scheduler > "$NS/scheduler_$NS.log" -n $NS  
-      echo "Gathering logs of worker in $NS Namespace ";kubectl logs deployment/$Release_Name-worker -c worker > "$NS/worker_$NS.log" -n $NS
-      echo "Gathering logs of webserverin $NS Namespace ";kubectl logs deployment/$Release_Name-webserver -c webserver > "$NS/webserver$NS.log" -n $NS
-      echo "Gathering logs of triggerer in $NS Namespace ";kubectl logs deployment/$Release_Name-triggerer -c triggerer > "$NS/triggerer $NS.log" -n $NS
-      echo "Gathering logs of pgbouncer in $NS Namespace ";kubectl logs deployment/$Release_Name-pgbouncer -c pgbouncer > "$NS/pgbouncer _$NS.log" -n $NS    
-      echo "Gathering logs of flower  in $NS Namespace ";kubectl logs deployment/$Release_Name-flower > "$NS/flower _$NS.log" -n $NS
-      echo "Gathering logs of statsd in $NS Namespace ";kubectl logs deployment/$Release_Name-statsd > "$NS/statsd_$NS.log" -n $NS
-      echo "Gathering logs of redis in $NS Namespace ";kubectl logs sts/$Release_Name-redis > "$NS/redis_$NS.log" -n $NS 
-      echo "Gathering helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/helm_history_$Release_Name.yaml"
-      echo "Gathering helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
+      echo "Gathering logs of scheduler in $NS Namespace ";kubectl logs deployment/$Release_Name-scheduler -c scheduler > "$NS/AllPodlogs/morelogs/scheduler_$NS.log" -n $NS  
+      echo "Gathering logs of worker in $NS Namespace ";kubectl logs deployment/$Release_Name-worker -c worker > "$NS/AllPodlogs/morelogs/worker_$NS.log" -n $NS
+      echo "Gathering logs of webserverin $NS Namespace ";kubectl logs deployment/$Release_Name-webserver -c webserver > "$NS/AllPodlogs/morelogs/webserver$NS.log" -n $NS
+      echo "Gathering logs of triggerer in $NS Namespace ";kubectl logs deployment/$Release_Name-triggerer -c triggerer > "$NS/AllPodlogs/morelogs/triggerer $NS.log" -n $NS
+      echo "Gathering logs of pgbouncer in $NS Namespace ";kubectl logs deployment/$Release_Name-pgbouncer -c pgbouncer > "$NS/AllPodlogs/morelogs/pgbouncer _$NS.log" -n $NS    
+      echo "Gathering logs of flower  in $NS Namespace ";kubectl logs deployment/$Release_Name-flower > "$NS/AllPodlogs/morelogs/flower _$NS.log" -n $NS
+      echo "Gathering logs of statsd in $NS Namespace ";kubectl logs deployment/$Release_Name-statsd > "$NS/AllPodlogs/morelogs/statsd_$NS.log" -n $NS
+      echo "Gathering logs of redis in $NS Namespace ";kubectl logs sts/$Release_Name-redis > "$NS/AllPodlogs/morelogs/redis_$NS.log" -n $NS 
+      echo "Gathering helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/AllPodlogs/morelogs/helm_history_$Release_Name.yaml"
+      echo "Gathering helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/AllPodlogs/morelogs/helm_values_$Release_Name.yaml"
     done
-
 
 
   
