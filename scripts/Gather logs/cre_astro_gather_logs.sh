@@ -4,6 +4,21 @@ timestamp=`date '+%d/%m/%Y %H:%M:%S'`
 #export ASTRONOMER_NAMESPACE=astronomer
 #export DIR="/tmp"
 #export BASEDOMAIN=nandlal51.astro-cre.com 
+echo "****Example to Run This Script:****
+
+Enter your Astronomer Namespace Name: (This is the namespace where all core Astronomer components like Houston, Commander, Registry, etc., are running)
+astronomer <============ 1
+Enter the directory path where you want to save your exported log files:
+/tmp     <============ 2
+If you have a test cluster with the URL https://app.cre-software-01.astro-cre.com, then your base domain would be cre-software-01.astro-cre.com.
+Enter your base domain:
+cre-software-01.astro-cre.com  <============ 3
+
+****
+
+You can refer to the above example as a guide when entering values for your environment."
+
+
 echo "Enter your Astronomer Namespace Name:"
 read ASTRONOMER_NAMESPACE
 echo "Enter the path of directory where you want to keep your log files exported:"
@@ -48,6 +63,7 @@ chmod -R 777 "$DIR"
 ###https://stackoverflow.com/questions/589149/bash-script-to-cd-to-directory-with-spaces-in-pathname
 cd "$DIR"
 ####creating namespace Directories###
+# Loop through all namespaces
 for NS in $(kubectl get ns --no-headers | awk '{print $1}'); do
   echo "Creating namespace $NS directory"
   mkdir -p "$NS/AllPodlogs"
@@ -84,7 +100,53 @@ for NS in $(kubectl get ns --no-headers | awk '{print $1}'); do
   else
     echo "No PVCs found in namespace '$NS'."
   fi
+
+  echo "======================Gathering Describe output of Bad state pod in $NS======================"
+  # Loop through pods in a bad state
+  for BAD_POD in $(kubectl get pods --no-headers -n "$NS" | grep -v Running | grep -v Completed | awk '{print $1}'); do
+    echo "$BAD_POD pod is in a bad state"
+    echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace"
+    kubectl describe pod "$BAD_POD" -n "$NS" > "$NS/$BAD_POD-BAD_$NS.log"
+  done
+
+  echo "======================Gathering log output of Bad state pod in $NS======================"
+  # Gather logs of pods in a bad state
+  for BAD_POD in $(kubectl get pods --no-headers -n "$NS" | grep -v Running | grep -v Completed | awk '{print $1}'); do
+    echo "Starting to collect log of the bad state pod $BAD_POD in $NS namespace"
+    for container_name in $(kubectl get pods "$BAD_POD" -o jsonpath='{.spec.containers[*].name}' -n "$NS" | awk '{NF-=0; OFS="\n"; $1=$1}1' | sort); do
+      echo "Collecting log of the container $container_name in pod $BAD_POD in the $NS namespace now"
+      kubectl logs "$BAD_POD" -n "$NS" -c "$container_name" > "$NS/$BAD_POD-pod_$container_name-BADPODLOG.log"
+    done
+  done
+
+  echo "======================Gathering logs of All the pods in $NS======================"
+  # Gather logs of all pods
+  for POD in $(kubectl get pods --no-headers -n "$NS" | awk '{print $1}'); do
+    echo "Starting to collect log of the pod $POD in $NS namespace"
+    for container_name in $(kubectl get pods "$POD" -o jsonpath='{.spec.containers[*].name}' -n "$NS" | awk '{NF-=0; OFS="\n"; $1=$1}1' | sort); do
+      echo "Collecting log of the container $container_name in pod $POD in the $NS namespace now"
+      kubectl logs "$POD" -n "$NS" -c "$container_name" > "$NS/AllPodlogs/$POD-pod_$container_name-container.log"
+    done
+  done
+
 done
+
+# Create a node folder at the same level as the namespace folders
+NODE_DIR="node"
+mkdir -p "$NODE_DIR"
+
+# Get and save the describe output of each node
+for node in $(kubectl get nodes --no-headers | awk '{print $1}'); do
+  echo "Describing node '$node'"
+  kubectl describe node "$node" > "$NODE_DIR/${node}_describe.txt"
+  echo "Node '$node' described and saved to $NODE_DIR/${node}_describe.txt"
+done
+
+# Get and save the wide output of all nodes
+kubectl get nodes -o wide > "$NODE_DIR/nodes_wide.txt"
+echo "Wide output of all nodes saved to $NODE_DIR/nodes_wide.txt"
+
+
 #####====================================================================================================================================================#####
 ####Gathering Describe output of bad state pods in all namespaces###
 
@@ -105,47 +167,47 @@ done
 
 
 
-echo "======================Gathering Describe output of Bad state pod======================"
-for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
-do
-  for BAD_POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
-    export BAD_POD=$BAD_POD;echo $BAD_POD pod is in bad state;echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace ";kubectl describe pod $BAD_POD  > "$NS/$BAD_POD-BAD_$NS.log" -n $NS   
-    done
-done
+# echo "======================Gathering Describe output of Bad state pod======================"
+# for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
+# do
+#   for BAD_POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
+#     export BAD_POD=$BAD_POD;echo $BAD_POD pod is in bad state;echo "Collecting Describe output of bad state pod $BAD_POD in $NS Namespace ";kubectl describe pod $BAD_POD  > "$NS/$BAD_POD-BAD_$NS.log" -n $NS   
+#     done
+# done
 
 
-echo "======================Gathering log output of Bad state pod======================"
-for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
-do
-  for BAD_POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
-    export BAD_POD=$BAD_POD;echo "Starting to Collect log of the bad state pod $BAD_POD in $NS namespace";for container_name in $(kubectl get pods $BAD_POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
-    echo Collecting log of the container $container_name in pod $BAD_POD in the $NS namespace now;kubectl logs $BAD_POD -n $NS -c $container_name > "$NS/$BAD_POD-pod_$container_name-BADPODLOG.log"  
-    done
-done
-done
+# echo "======================Gathering log output of Bad state pod======================"
+# for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
+# do
+#   for BAD_POD in $(kubectl get pods --no-headers -n $NS |grep -v Running|grep -v Completed|awk '{ print $1}') ; do
+#     export BAD_POD=$BAD_POD;echo "Starting to Collect log of the bad state pod $BAD_POD in $NS namespace";for container_name in $(kubectl get pods $BAD_POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
+#     echo Collecting log of the container $container_name in pod $BAD_POD in the $NS namespace now;kubectl logs $BAD_POD -n $NS -c $container_name > "$NS/$BAD_POD-pod_$container_name-BADPODLOG.log"  
+#     done
+# done
+# done
 
 
 
 
-echo "======================Gathering logs of All the pods ======================"
-for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
-do
-  for POD in $(kubectl get pods --no-headers -n $NS |awk '{ print $1}') ; do
-    export POD=$POD;echo "Starting to Collect log of the pod $POD in $NS namespace";for container_name in $(kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
-    echo Collecting log of the container $container_name in pod $POD in the $NS namespace now;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name-container.log"  
-    done
-done
-done
+# echo "======================Gathering logs of All the pods ======================"
+# for NS in $(kubectl get ns --no-headers| awk '{print $1}'); 
+# do
+#   for POD in $(kubectl get pods --no-headers -n $NS |awk '{ print $1}') ; do
+#     export POD=$POD;echo "Starting to Collect log of the pod $POD in $NS namespace";for container_name in $(kubectl get pods $POD -o jsonpath='{.spec.containers[*].name}' -n $NS|awk '{NF-=0; OFS="\n"; $1=$1}1' | sort);do
+#     echo Collecting log of the container $container_name in pod $POD in the $NS namespace now;kubectl logs $POD -n $NS -c $container_name > "$NS/AllPodlogs/$POD-pod_$container_name-container.log"  
+#     done
+# done
+# done
 
 
 
 
 #####====================================================================================================================================================#####
-####Gathering Describe output of all the Nodes
-echo "======================Gathering Describe output of all the nodes======================"
-for NODE in $(kubectl get nodes --no-headers |awk '{ print $1}') ; do
-    echo "Collecting Describe output of Node $NODE ";kubectl describe nodes $NODE > "$ASTRONOMER_NAMESPACE/DESCRIBE_$NODE.log"
-done
+# ####Gathering Describe output of all the Nodes
+# echo "======================Gathering Describe output of all the nodes======================"
+# for NODE in $(kubectl get nodes --no-headers |awk '{ print $1}') ; do
+#     echo "Collecting Describe output of Node $NODE ";kubectl describe nodes $NODE > "$ASTRONOMER_NAMESPACE/DESCRIBE_$NODE.log"
+# done
 #####==================================================================================================================================================#####
 ####Gathering All the $ASTRONOMER_NAMESPACE logs###
 echo "======================Gathering All the Deployment logs in $ASTRONOMER_NAMESPACE namespace logs======================"
@@ -175,7 +237,7 @@ echo "Gathering All replica status in all namespaces";kubectl get rs --all-names
 echo "Gathering Pod Running status in $ASTRONOMER_NAMESPACE Namespace";kubectl get pods -o wide > "$ASTRONOMER_NAMESPACE/pods_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering events in $ASTRONOMER_NAMESPACE Namespace ";kubectl get events > "$ASTRONOMER_NAMESPACE/events_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering secrets in $ASTRONOMER_NAMESPACE Namespace ";kubectl get secrets > "$ASTRONOMER_NAMESPACE/secrets_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering Node Status";kubectl get nodes -o wide > "$ASTRONOMER_NAMESPACE/nodes.log"
+# echo "Gathering Node Status";kubectl get nodes -o wide > "$ASTRONOMER_NAMESPACE/nodes.log"
 echo "Gathering kube-system pod status";kubectl get pods -o wide -n kube-system > "$ASTRONOMER_NAMESPACE/kube-system.log" 
 echo "Gathering sevice Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get svc > "$ASTRONOMER_NAMESPACE/svc_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering persistent volume Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get pvc > "$ASTRONOMER_NAMESPACE/$PVC_DIR/pvc_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
