@@ -1,5 +1,30 @@
 
 ****cre_astro_gather_logs****
+
+
+• Download the script using curl or get
+
+~~~
+wget https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh 
+~~~
+Or
+~~~
+curl -fsSL -o cre_astro_software_gather_logs.sh https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
+~~~
+
+• Run the script
+
+~~~
+sh cre_astro_software_gather_logs.sh 
+~~~
+
+or
+
+~~~
+./cre_astro_software_gather_logs.sh
+~~~
+
+
 ====================================
 
 It will export pod logs,events,helm values,node status,secrets,rs,ingres,jobs etc. 
