@@ -48,9 +48,43 @@ chmod -R 777 "$DIR"
 ###https://stackoverflow.com/questions/589149/bash-script-to-cd-to-directory-with-spaces-in-pathname
 cd "$DIR"
 ####creating namespace Directories###
-for NS in $(kubectl get ns --no-headers| awk '{print $1}'); do
-    echo "creating namespace $NS Directory ";mkdir $NS ;mkdir $NS/AllPodlogs
+for NS in $(kubectl get ns --no-headers | awk '{print $1}'); do
+  echo "Creating namespace $NS directory"
+  mkdir -p "$NS/AllPodlogs"
+
+  # Get all Helm releases in the current namespace
+  releases=$(helm list -n "$NS" -o json | grep -oP '(?<="name":")[^"]*')
+
+  # Loop through each release and gather its values
+  for release in $releases; do
+    # Fetch Helm values
+    helm_values=$(helm get values "$release" -n "$NS")
+
+    # Save Helm values to a file in the namespace directory
+    echo "$helm_values" > "$NS/${release}_values.yaml"
+
+    # Optionally, log success message
+    echo "Values for release '$release' in namespace '$NS' saved to $NS/${release}_values.yaml"
+  done
+
+  # Check for PVCs in the namespace
+  pvcs=$(kubectl get pvc -n "$NS" -o custom-columns=NAME:.metadata.name --no-headers)
+
+  if [ -n "$pvcs" ]; then
+    # Create a PVC folder under the namespace directory if PVCs are present
+    PVC_DIR="$NS/PVC"
+    mkdir -p "$PVC_DIR"
+
+    # Loop through each PVC and describe it
+    for pvc in $pvcs; do
+      echo "Describing PVC '$pvc' in namespace '$NS'"
+      kubectl describe pvc "$pvc" -n "$NS" > "$PVC_DIR/${pvc}_describe.txt"
+      echo "PVC '$pvc' described and saved to $PVC_DIR/${pvc}_describe.txt"
     done
+  else
+    echo "No PVCs found in namespace '$NS'."
+  fi
+done
 #####====================================================================================================================================================#####
 ####Gathering Describe output of bad state pods in all namespaces###
 
@@ -65,6 +99,10 @@ for NS in $(kubectl get ns --no-headers| awk '{print $1}'); do
 #    export POD=$POD;echo $POD pod is in bad state;echo "Collecting Describe output of bad state pod $POD in $NS Namespace ";kubectl describe pod $POD  > "$NS/$POD-BAD_$NS.log" -n $NS   
 #    done
 #done
+
+
+
+
 
 
 echo "======================Gathering Describe output of Bad state pod======================"
@@ -140,7 +178,7 @@ echo "Gathering secrets in $ASTRONOMER_NAMESPACE Namespace ";kubectl get secrets
 echo "Gathering Node Status";kubectl get nodes -o wide > "$ASTRONOMER_NAMESPACE/nodes.log"
 echo "Gathering kube-system pod status";kubectl get pods -o wide -n kube-system > "$ASTRONOMER_NAMESPACE/kube-system.log" 
 echo "Gathering sevice Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get svc > "$ASTRONOMER_NAMESPACE/svc_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
-echo "Gathering persistent volume Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get pvc > "$ASTRONOMER_NAMESPACE/pvc_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
+echo "Gathering persistent volume Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get pvc > "$ASTRONOMER_NAMESPACE/$PVC_DIR/pvc_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering ingress Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get ingress > "$ASTRONOMER_NAMESPACE/ingress_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering cronjobs Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get cronjobs > "$ASTRONOMER_NAMESPACE/cronjobs_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
 echo "Gathering jobs Status in $ASTRONOMER_NAMESPACE Namespace ";kubectl get jobs > "$ASTRONOMER_NAMESPACE/jobs_$ASTRONOMER_NAMESPACE.log" -n $ASTRONOMER_NAMESPACE
@@ -163,7 +201,7 @@ echo "======================Collecting Some General enviornment Information in t
       echo "Gathering events in $NS Namespace ";kubectl get events > "$NS/events_$NS.log" -n $NS
       echo "Gathering secrets in $NS Namespace ";kubectl get secrets > "$NS/secrets_$NS.log" -n $NS
       echo "Gathering sevice Status in $NS Namespace ";kubectl get svc > "$NS/svc_$NS.log" -n $NS
-      echo "Gathering persistent volume Status in $NS Namespace ";kubectl get pvc > "$NS/pvc_$NS.log" -n $NS
+      echo "Gathering persistent volume Status in $NS Namespace ";kubectl get pvc > "$NS/$PVC_DIR/pvc_$NS.log" -n $NS
       echo "Gathering ingress Status in $NS Namespace ";kubectl get ingress > "$NS/ingress_$NS.log" -n $NS
       echo "Gathering cronjobs Status in $NS Namespace ";kubectl get cronjobs > "$NS/cronjobs_$NS.log" -n $NS
       echo "Gathering jobs Status in $NS Namespace ";kubectl get jobs > "$NS/cronjobs_NS.log" -n $NS
@@ -182,6 +220,12 @@ echo "======================Gathering All the Deployment namespace logs in the $
       echo "Gathering helm history in $NS Namespace";helm history $Release_Name -n $NS > "$NS/helm_history_$Release_Name.yaml"
       echo "Gathering helm values from $NS Namespace";helm get values $Release_Name -o yaml -n $NS  > "$NS/helm_values_$Release_Name.yaml"
     done
+
+
+
+  
+
+
 
 echo "Checking ENDPOINTS"
 
@@ -214,7 +258,7 @@ echo "Here is the list of files created:"
 ls -lhtr $DIR/*
 ls -lhtr $DIR/$ASTRONOMER_NAMESPACE*
 ls -lhtr
-echo "Please attach the zip file or .gz file created in $cdir to the zendesk ticket for reference."
+echo "Please attach the zip or .gz file created in $cdir to the Zendesk ticket for reference. If the file exceeds 50 MB, kindly use a cloud storage service like Google Drive or similar."
 #echo "Timing out for 30 sec for zip file to be present before sending"
 #@timeout /t 30
 #####====================================================================================================================================================#####
@@ -222,5 +266,3 @@ echo "Please attach the zip file or .gz file created in $cdir to the zendesk tic
 #echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -a $DIR"_$(date +%F).tar.gz -s "Platform logs for troubleshooting $Ticket" -- $mail
 #####====================================================================================================================================================#####
 #echo "Here are the Platform logs for troubleshooting $Ticket" | mutt -a "$DIR".zip" -s "Platform logs for troubleshooting $Ticket" -- $mail
-
-
