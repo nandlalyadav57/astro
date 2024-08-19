@@ -1,4 +1,5 @@
 
+```
 ****cre_astro_gather_logs Script****
 ====================================
 
@@ -36,40 +37,33 @@ or
 ./cre_astro_software_gather_logs.sh
 ```
 
+Ensure you provide the following parameters when running the script, as it is interactive and will prompt you for these details:
 
+1. **Astronomer namespace**: For example, "astronomer," which is the namespace where all Astronomer system pods run.
+2. **DIR (local directory)**: For instance, "/tmp," which is the local directory where the script will export logs. Attach the resulting zip file from this location to your support ticket.
+3. **BASEDOMAIN**: For example, "nandlal51.astro-cre.com," derived from the test cluster's URL, such as "https://app.nandlal51.astro-cre.com."
 
-Ensure you provide the following parameters when running the script, as it is interactive and will prompt you for the following details:
+The script will export various data, including pod logs, events, helm values, node status, replica sets, Ingress configurations, jobs, etc. If the file exceeds 50 MB, upload it to cloud storage and share the link in your support request. It will also describe the output of all the nodes and the status of pods in a bad state.
 
-Astronomer namespace: For example, "astronomer," which is the namespace where all Astronomer system pods run.
-DIR (local directory): For instance, "/tmp," which is the local directory where the script will export logs. Attach the resulting zip file from this location to the ticket.
-BASEDOMAIN: For example, "nandlal51.astro-cre.com," derived from the test cluster's URL, such as "https://app.nandlal51.astro-cre.com."
+**Configuration Parameters**
 
+Ensure you add the following parameters in the script. The script is interactive and will prompt you for these values:
 
-The script will export various data, including pod logs, events, helm values, node status, replica sets, Ingress configurations, jobs, etc. If the file exceeds 50 MB, upload it to cloud storage and share the link in your support request.
-It will also describe the output of all the nodes and the status of pods in a bad state.
-
-We have to make sure to add the below parameters in the script. The script is interactive and would ask the same
-
-1.) Astronomer namespace (Astronomer Namespace to collect logs)
-
-2.) DIR (local directory to export the logs)
-
-3.) BASEDOMAIN (I had a test cluster with the URL https://app.nandlal51.astro-cre.comthen my base domain isnandlal51.astro-cre.com
-
-~~~
+```bash
 export ASTRONOMER_NAMESPACE=
 export DIR=
 export BASEDOMAIN=
-~~~
+```
 
-Usage: Just run the shell script as below and you will get the required log files.
+**Usage**: Just run the shell script as shown above to get the required log files.
 
-Kindly make sure your script is in Unix format and executable:
+**Additional Notes**: Make sure your script is in Unix format and executable:
 
-~~~
+```bash
 dos2unix *.sh 
 chmod 755 *.sh
-~~~
+```
+
 
 Expected output:
 
