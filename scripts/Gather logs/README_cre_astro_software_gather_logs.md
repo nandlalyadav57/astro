@@ -2,9 +2,71 @@
 ****cre_astro_gather_logs Script****
 ====================================
 
-This script will export pod logs, events, helm values, node status, secrets, rs, Ingres, jobs, etc. which are required chiefly for troubleshooting purposes.
 
-Also, it will describe the output of all the nodes & the status of pods in a bad state.
+Download and run the script:
+
+~~~
+curl -fsSL -o cre_astro_software_gather_logs.sh https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
+or
+wget https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
+
+chmod +x cre_astro_software_gather_logs.sh
+
+sh cre_astro_software_gather_logs.sh
+or
+./cre_astro_software_gather_logs.sh
+~~~
+
+
+
+
+
+```
+## Download and Run the Script
+
+You can download and run the script using either `curl` or `wget`:
+
+### Using `curl`:
+
+```bash
+curl -fsSL -o cre_astro_software_gather_logs.sh https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
+```
+
+### Using `wget`:
+
+```bash
+wget https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
+```
+
+After downloading the script, make it executable:
+
+```bash
+chmod +x cre_astro_software_gather_logs.sh
+```
+
+Then, you can run the script using either:
+
+```bash
+sh cre_astro_software_gather_logs.sh
+```
+
+or
+
+```bash
+./cre_astro_software_gather_logs.sh
+```
+
+
+
+Ensure you provide the following parameters when running the script, as it is interactive and will prompt you for the following details:
+
+Astronomer namespace: For example, "astronomer," which is the namespace where all Astronomer system pods run.
+DIR (local directory): For instance, "/tmp," which is the local directory where the script will export logs. Attach the resulting zip file from this location to the ticket.
+BASEDOMAIN: For example, "nandlal51.astro-cre.com," derived from the test cluster's URL, such as "https://app.nandlal51.astro-cre.com."
+
+
+The script will export various data, including pod logs, events, helm values, node status, replica sets, Ingress configurations, jobs, etc. If the file exceeds 50 MB, upload it to cloud storage and share the link in your support request.
+It will also describe the output of all the nodes and the status of pods in a bad state.
 
 We have to make sure to add the below parameters in the script. The script is interactive and would ask the same
 
