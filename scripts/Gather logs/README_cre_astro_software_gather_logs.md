@@ -2,26 +2,6 @@
 ****cre_astro_gather_logs Script****
 ====================================
 
-
-Download and run the script:
-
-~~~
-curl -fsSL -o cre_astro_software_gather_logs.sh https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
-or
-wget https://raw.githubusercontent.com/nandlalyadav57/astro/main/scripts/Gather%20logs/cre_astro_software_gather_logs.sh
-
-chmod +x cre_astro_software_gather_logs.sh
-
-sh cre_astro_software_gather_logs.sh
-or
-./cre_astro_software_gather_logs.sh
-~~~
-
-
-
-
-
-```
 ## Download and Run the Script
 
 You can download and run the script using either `curl` or `wget`:
