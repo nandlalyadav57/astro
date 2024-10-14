@@ -89,11 +89,11 @@ if __name__ == "__main__":
 **Usage:**
 - Pause all DAGs:
   ```bash
-  python3 pause_unpause_dags_astronomer_software.py --action pause --api_key <api key> --deployment <deployment name> --domain <domain>
+  python3 pause_unpause_dags_astronomer_software.py --action pause --api_key <api key> --deployment <deployment release name> --domain <domain>
   ```
 - Pause specific DAGs:
   ```bash
-  python3 pause_unpause_dags_astronomer_software.py --action pause --api_key <api key> --deployment <deployment name> --domain <domain> --dag_ids dag_id_1 dag_id_2 dag_id_3
+  python3 pause_unpause_dags_astronomer_software.py --action pause --api_key <api key> --deployment <deployment release name> --domain <domain> --dag_ids dag_id_1 dag_id_2 dag_id_3
   ```
 
 ## Custom Airflow Operator
